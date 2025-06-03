@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
+import { Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../shared/header/header.component';
 
 interface RequestItem {
@@ -16,15 +17,15 @@ interface RequestItem {
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
-  imports: [
+  standalone: true,  imports: [
     CommonModule,
     MatCardModule,
     MatButtonModule,
     MatTableModule,
     MatIconModule,
     MatBadgeModule,
-    HeaderComponent
+    HeaderComponent,
+    RouterModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -37,6 +38,8 @@ export class DashboardComponent {
   ];
   
   showRequests: boolean = false;
+  
+  constructor(private readonly router: Router) {}
   
   toggleRequestsView() {
     this.showRequests = !this.showRequests;
@@ -53,9 +56,9 @@ export class DashboardComponent {
     viewDetails(id: number) {
     console.log(`Ver detalles de la solicitud ${id}`);
   }
-  
-  registerNewUser() {
-    console.log('Registrar nuevo usuario');
+
+  public registerNewUser() {
+    this.router.navigate(['/create-user']);
   }
   
   requestAccess() {

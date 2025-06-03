@@ -11,5 +11,12 @@ export const routes: Routes = [
         canActivate: [tokenGuard],
         loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
     },
-    { path: '', redirectTo: '/login', pathMatch: 'full' }
+    {
+        path: 'create-user',
+        canActivate: [tokenGuard],
+        loadComponent: () => import('./pages/create-user/create-user.component').then(m => m.CreateUserComponent),
+    },
+    
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: '**', redirectTo: '/login' }
 ];

@@ -3,18 +3,26 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-wrap: wrap;
+  padding: 8px 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header-title {
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
   font-size: 1.3rem;
+  white-space: normal;
+  line-height: 1.2;
+  margin: 8px 0;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
   gap: 16px;
+  margin: 8px 0;
 }
 
 .view-requests-btn {
@@ -23,6 +31,8 @@
   gap: 8px;
   font-family: 'Roboto', sans-serif;
   border-radius: 4px;
+  white-space: nowrap;
+  min-height: 36px;
 }
 
 .logout-btn {
@@ -30,5 +40,37 @@
   
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .header-title {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .view-requests-btn {
+    font-size: 0.8rem;
+    padding: 0 12px;
+    
+    .mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      line-height: 16px;
+    }
   }
 }

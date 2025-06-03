@@ -3,6 +3,9 @@
   background-color: #f8f9fa;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .dashboard-content {
@@ -10,6 +13,7 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .dashboard-title {
@@ -19,6 +23,10 @@
   margin-bottom: 2rem;
   color: #212121;
   text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
 }
 
 .dashboard-cards {
@@ -35,22 +43,48 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
   }
 
+  mat-card-header {
+    padding: 16px 16px 0;
+    overflow: hidden;
+    
+    mat-card-title {
+      word-break: break-word;
+    }
+  }
+
   mat-card-content {
     flex-grow: 1;
-    padding: 0 1rem;
-    margin-bottom: 1rem;
+    padding: 16px;
+    margin-bottom: 0;
+    
+    p {
+      margin-top: 0;
+    }
   }
 
   mat-card-actions {
-    padding: 0 1rem 1rem;
+    padding: 8px 16px 16px;
     display: flex;
     justify-content: center;
+    
+    button {
+      width: 100%;
+      max-width: 250px;
+      white-space: normal;
+      line-height: 1.2;
+      height: auto;
+      min-height: 36px;
+      padding: 8px 16px;
+    }
   }
 }
 
@@ -76,6 +110,9 @@
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 
   h2 {
     font-family: 'Montserrat', sans-serif;
@@ -84,17 +121,27 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-wrap: wrap;
   }
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
 }
 
 .requests-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 
   th, td {
     padding: 1rem;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
+    word-break: break-word;
   }
 
   th {
@@ -106,6 +153,7 @@
 
   button {
     font-family: 'Roboto', sans-serif;
+    white-space: nowrap;
   }
 }
 
@@ -138,13 +186,119 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard-content {
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .dashboard-title {
+    font-size: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
   .dashboard-cards {
     grid-template-columns: 1fr;
   }
 
+  .feature-card mat-card-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    
+    .mat-mdc-card-avatar {
+      margin-bottom: 8px;
+    }
+  }
+
+  .requests-container {
+    padding: 1rem;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
   .requests-table {
     display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+    width: 100%;
+    box-sizing: border-box;
+    table-layout: auto;
+  }
+  
+  .requests-table thead {
+    display: none;
+  }
+  
+  .requests-table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 0.5rem;
+  }
+  
+  .requests-table tbody td {
+    display: flex;
+    text-align: right;
+    padding: 0.5rem;
+    border-bottom: none;
+    word-break: break-word;
+    align-items: center;
+  }
+  
+  .requests-table tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: auto;
+    text-align: left;
+    min-width: 30%;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-content {
+    padding: 0.75rem;
+  }
+  
+  .dashboard-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .requests-container {
+    padding: 0.75rem;
+  }
+  
+  .requests-container h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .status-indicator {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .feature-card mat-card-actions button {
+    font-size: 0.875rem;
+  }
+  
+  .feature-card {
+    margin-bottom: 1rem;
+  }
+  
+  .table-responsive {
+    margin: 0 -0.5rem;
+  }
+  
+  .requests-table tbody td {
+    padding: 0.4rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .requests-table tbody td::before {
+    margin-bottom: 0.25rem;
+    width: 100%;
   }
 }

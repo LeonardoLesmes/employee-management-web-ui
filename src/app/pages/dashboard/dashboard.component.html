@@ -55,31 +55,32 @@
       <h2>Solicitudes Recientes 
         <span *ngIf="requests.length > 0" [matBadge]="requests.length" matBadgeColor="accent" matBadgeOverlap="false"></span>
       </h2>
-      
-      <table class="requests-table">
-        <thead>
-          <tr>
-            <th>Persona</th>
-            <th>Solicitud</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let request of requests" [ngClass]="getStatusClass(request.status)">
-            <td>{{ request.person }}</td>
-            <td>{{ request.type }}</td>
-            <td>
-              <span class="status-indicator">{{ request.status | titlecase }}</span>
-            </td>
-            <td>
-              <button mat-stroked-button (click)="viewDetails(request.id)">
-                Ver detalles
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="table-responsive">
+        <table class="requests-table">
+          <thead>
+            <tr>
+              <th>Persona</th>
+              <th>Solicitud</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let request of requests" [ngClass]="getStatusClass(request.status)">
+              <td data-label="Persona">{{ request.person }}</td>
+              <td data-label="Solicitud">{{ request.type }}</td>
+              <td data-label="Estado">
+                <span class="status-indicator">{{ request.status | titlecase }}</span>
+              </td>
+              <td data-label="Acciones">
+                <button mat-stroked-button (click)="viewDetails(request.id)">
+                  Ver detalles
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

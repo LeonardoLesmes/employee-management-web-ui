@@ -12,12 +12,29 @@ export class StorageService {
     } catch (error) {
       console.error(`Error setting item in localStorage: ${error}`);
     }
-  }
+  } 
 
-  public getItem<T>(key: string): T | null {
+  
+  public getItem<T>(key: string, parseJson: boolean = true): T | null {
     try {
       const serializedValue = localStorage.getItem(key);
-      return serializedValue ? JSON.parse(serializedValue) : null;
+      
+      if (serializedValue === null) {
+        return null;
+      }
+
+      // Si no queremos parsear JSON, devolvemos el valor como está
+      if (!parseJson) {
+        return serializedValue as unknown as T;
+      }
+      
+      try {
+        // Intentamos parsear el JSON
+        return JSON.parse(serializedValue);
+      } catch {
+        // Si falla el parsing, devolvemos el valor como está
+        return serializedValue as unknown as T;
+      }
     } catch (error) {
       console.error(`Error getting item from localStorage: ${error}`);
       return null;
