@@ -12,7 +12,6 @@ export class AppComponent implements OnInit {
   private readonly storage = inject(StorageService);
   
   ngOnInit(): void {
-    this.storage.setItem('token', 'ksihaksdnakjdnaskdn');
   }
 
 }

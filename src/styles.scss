@@ -4,6 +4,15 @@
 // Incluye los componentes básicos de Angular Material
 @include mat.core();
 
+.error-snackbar {
+  background: #f44336;
+  color: white;
+  
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
 html, body {
     @include mat.theme((
         color: (
