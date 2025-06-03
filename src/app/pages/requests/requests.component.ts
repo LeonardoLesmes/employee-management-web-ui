@@ -2,10 +2,10 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -42,7 +42,7 @@ import { ReqStatus } from './models/req-status';
 export class RequestsComponent implements OnInit {
   public dataSource = computed(() => this.formatData());
 
-  private readonly requests = signal<RequestRes>({ users: [], access: [] });
+  private readonly requests = signal<RequestRes>({ users: [], access: [], computers: [] });
 
   private readonly storage = inject(StorageService);
   constructor(
@@ -84,8 +84,18 @@ export class RequestsComponent implements OnInit {
       status: this.formatStatus(access.status),
       type: 'access'
     }));
+
+    const computers = this.requests().computers.map((computer): FormartedData => ({
+      id: computer.id,
+      user: computer.employeeName,
+      userId: computer.employeeId,
+      request: 'Asignación de computador',
+      date: new Date(computer.requestDate),
+      status: this.formatStatus(computer.status),
+      type: 'computer'
+    }));
     
-    return [ ...users, ...access ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return [ ...users, ...access, ...computers].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   private formatStatus(status: string): ReqStatus{

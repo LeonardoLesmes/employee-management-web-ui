@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { UserService } from '../../../core/services/user/user.service';
 import { ComputerService } from '../../../core/services/computer/computer.service';
-import { ComputerRes } from '../../../core/models/computer.model';
+import { ComputerRes } from '../../../core/models/computer-res.model';
 import { UserRes } from '../../../core/models/user-res';
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { StorageService } from '../../../core/services/storage/storage.service';
@@ -48,7 +48,7 @@ export class ComputerComponent implements OnInit {
   computers: ComputerRes[] = [];
   loading = false;
   searched = false;
-  userComputer: UserComputerRes | null = null; // Nueva propiedad para almacenar la computadora asignada al usuario
+  userComputer: UserComputerRes | null = null;
 
   private readonly fb = inject(FormBuilder);
   private readonly userService = inject(UserService);
@@ -98,13 +98,10 @@ export class ComputerComponent implements OnInit {
     
     this.loading = true;
     
-    // Primero buscamos si el usuario existe
     this.userService.getUserById(userId)
       .subscribe({
         next: (user) => {
           this.user = user;
-          
-          // Una vez que encontramos al usuario, verificamos si ya tiene una computadora asignada
           this.computerService.getComputerByUserId(userId)
             .pipe(
               finalize(() => {

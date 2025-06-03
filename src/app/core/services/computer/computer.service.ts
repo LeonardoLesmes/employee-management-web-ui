@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ComputerRes } from '../../models/computer.model';
+import { ComputerRes } from '../../models/computer-res.model';
 import { ComputerReq } from '../../models/computer-assignment-req.model';
 import { UserComputerRes } from '../../models/user-computer.model';
 
@@ -11,8 +11,8 @@ import { UserComputerRes } from '../../models/user-computer.model';
 export class ComputerService {
   private readonly http = inject(HttpClient);
 
-  public getComputersByAssignedId(assignedId: number) {
-    return this.http.get<any[]>(`http://localhost:8080/api/computer-assignments/assigned-by/${assignedId}`);
+  public getComputersByAssignedId(assignedId: number): Observable<ComputerRes[]> {
+    return this.http.get<ComputerRes[]>(`http://localhost:8080/api/computer-assignments/assigned-by/${assignedId}`);
   }
 
   public getAvailableComputers(): Observable<ComputerRes[]> {

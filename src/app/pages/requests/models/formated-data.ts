@@ -7,5 +7,5 @@ export interface FormartedData {
     request: string;
     date: string | Date;
     status: ReqStatus;
-    type: 'user' | 'access';
+    type: 'user' | 'access' | 'computer';
 }

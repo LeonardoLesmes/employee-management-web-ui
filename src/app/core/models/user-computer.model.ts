@@ -1,4 +1,4 @@
-import { ComputerRes } from "./computer.model";
+import { ComputerRes } from "./computer-res.model";
 
 export interface UserComputerRes {
   employee: {
