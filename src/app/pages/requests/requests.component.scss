@@ -31,9 +31,10 @@
 
 .requests-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: 1.5rem;
   
+  .back-button,
   .refresh-button {
     display: flex;
     align-items: center;
@@ -96,19 +97,31 @@
   font-weight: 500;
 }
 
-.status-pending .status-indicator {
-  background-color: #fff8e1;
+.status-pending {
+  background-color: #fff8e1; /* Amarillo */
   color: #ffa000;
 }
 
-.status-approved .status-indicator {
-  background-color: #e8f5e9;
+.status-approved {
+  background-color: #e8f5e9; /* Verde */
   color: #2e7d32;
 }
 
-.status-rejected .status-indicator {
-  background-color: #ffebee;
+.status-rejected {
+  background-color: #ffebee; /* Rojo */
   color: #c62828;
+}
+
+// Para status cancelado (también usa color rojo)
+.status-canceled {
+  background-color: #ffebee; /* Rojo */
+  color: #c62828;
+}
+
+// Para status desconocido
+.status-unknown {
+  background-color: #f5f5f5; /* Negro/gris oscuro */
+  color: #212121;
 }
 
 .empty-table {
@@ -116,6 +129,15 @@
   padding: 2rem !important;
   font-style: italic;
   color: #757575;
+}
+
+.search-field {
+  width: 100%;
+  margin-bottom: 1rem;
+  
+  .mat-icon {
+    color: rgba(0, 0, 0, 0.54);
+  }
 }
 
 // Media queries para responsividad
@@ -164,5 +186,23 @@
     th, td {
       padding: 8px;
     }
+  }
+}
+
+.mat-mdc-row:hover {
+  background-color: #f5f5f5;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.mat-mdc-table {
+  width: 100%;
+  background: transparent;
+  
+  th.mat-header-cell {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.87);
   }
 }

@@ -1,16 +1,18 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { RequestDetailModalComponent } from '../../shared/request-detail-modal/request-detail-modal.component';
 import { RequestService } from '../../core/services/request/request.service';
-import { UserRes } from '../../core/models/user-res';
 import { RequestRes } from '../../core/models/request-res';
 import { FormartedData } from './models/formated-data';
 import { StorageService } from '../../core/services/storage/storage.service';
@@ -19,9 +21,9 @@ import { ReqStatus } from './models/req-status';
 
 @Component({
   selector: 'app-requests',
-  standalone: true,
-  imports: [
+  standalone: true,  imports: [
     CommonModule,
+    FormsModule,
     MatTableModule,
     MatButtonModule,
     MatIconModule,
@@ -29,6 +31,8 @@ import { ReqStatus } from './models/req-status';
     MatCardModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MatInputModule,
+    MatFormFieldModule,
     HeaderComponent
   ],
   providers: [RequestService],
@@ -38,13 +42,12 @@ import { ReqStatus } from './models/req-status';
 export class RequestsComponent implements OnInit {
   public dataSource = computed(() => this.formatData());
 
-  private readonly requests = signal<RequestRes>({ users: [] });
+  private readonly requests = signal<RequestRes>({ users: [], access: [] });
 
   private readonly storage = inject(StorageService);
-
   constructor(
+    private readonly router: Router,
     private readonly requestService: RequestService,
-    private readonly dialog: MatDialog,
     private readonly snackBar: MatSnackBar
   ) {}
 
@@ -63,12 +66,26 @@ export class RequestsComponent implements OnInit {
 
   private formatData(): FormartedData[] {
     const users = this.requests().users.map((user): FormartedData => ({
+      id: user.id,
       user: user.name,
+      userId: user.id,
       request: 'Creación de usuario',
       date: user.createdAt,
       status: this.formatStatus(user.status),
+      type: 'user'
     }));
-    return [ ...users ]
+    
+    const access = this.requests().access.map((access): FormartedData => ({
+      id: access.id,
+      user: access.employeeName,
+      userId: access.employeeId,
+      request: `Acceso a ${access.systemName}`,
+      date: new Date(access.requestDate),
+      status: this.formatStatus(access.status),
+      type: 'access'
+    }));
+    
+    return [ ...users, ...access ];
   }
 
   private formatStatus(status: string): ReqStatus{
@@ -86,8 +103,6 @@ export class RequestsComponent implements OnInit {
     }
   }
 
-
-
   refreshRequests(): void {
     this.loadRequests();
     this.snackBar.open('Solicitudes actualizadas', 'Cerrar', {
@@ -95,14 +110,22 @@ export class RequestsComponent implements OnInit {
     });
   }
 
-  viewDetails(request: UserRes): void {
-    this.dialog.open(RequestDetailModalComponent, {
-      width: '450px',
-      data: request
-    });
-  }  
-  
-  cancelRequest(requestId: number): void {
 
+  getStatusClass(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'pendiente':
+        return 'status-pending';
+      case 'aprobada':
+        return 'status-approved';
+      case 'rechazada':
+      case 'cancelada':
+        return 'status-rejected';
+      default:
+        return 'status-unknown';
+    }
+  }
+
+  goBackToDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 }
