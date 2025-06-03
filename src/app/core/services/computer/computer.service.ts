@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ComputerRes } from '../../models/computer.model';
 import { ComputerReq } from '../../models/computer-assignment-req.model';
 import { UserComputerRes } from '../../models/user-computer.model';
