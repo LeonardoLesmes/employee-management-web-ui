@@ -64,8 +64,7 @@ export class DashboardComponent {
   requestAccess() {
     this.router.navigate(['/request-access']);
   }
-  
-  assignComputer() {
-    console.log('Asignar computador');
+    assignComputer() {
+    this.router.navigate(['/assign-computer']);
   }
 }

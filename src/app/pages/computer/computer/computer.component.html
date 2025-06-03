@@ -1,0 +1,164 @@
+<div class="computer-assignment-container">
+  <app-header></app-header>
+  
+  <div class="computer-assignment-content">
+    <h1 class="computer-assignment-title">Asignación de Computadoras</h1>
+    
+    <div class="computer-assignment-actions">
+      <button 
+        mat-raised-button 
+        color="accent" 
+        class="back-button"
+        (click)="goBackToDashboard()">
+        <mat-icon>arrow_back</mat-icon>
+        Volver al Dashboard
+      </button>
+    </div>
+    
+    <form [formGroup]="assignmentForm" (ngSubmit)="onSubmit()">
+      <mat-card class="assignment-card">
+        <mat-card-content>
+          <div class="user-search-section">
+            <h2 class="section-title">Información del Usuario</h2>
+            
+            <div class="user-search-container">
+              <mat-form-field class="user-id-field">
+                <mat-label>ID de Usuario</mat-label>
+                <input matInput formControlName="userId" placeholder="Ingrese ID de usuario" type="number">
+                <mat-error *ngIf="assignmentForm.get('userId')?.hasError('required')">
+                  El ID de usuario es requerido
+                </mat-error>
+                <mat-error *ngIf="assignmentForm.get('userId')?.hasError('pattern')">
+                  El ID de usuario debe ser un número
+                </mat-error>
+              </mat-form-field>
+              
+              <button 
+                mat-raised-button 
+                color="primary" 
+                type="button"
+                [disabled]="assignmentForm.get('userId')?.invalid || loading"
+                (click)="searchUser()">
+                <mat-icon>search</mat-icon>
+                Buscar Usuario
+              </button>
+            </div>
+            
+            <div *ngIf="loading" class="loading-spinner">
+              <mat-spinner diameter="40"></mat-spinner>
+            </div>
+              <!-- Información del usuario si existe -->
+            <div *ngIf="user && searched" class="user-info">
+              <h3 class="user-info-name">{{user.name}}</h3>
+              <div class="user-info-details">
+                <div class="user-info-item">
+                  <span class="label">Departamento:</span>
+                  <span class="value">{{user.department}}</span>
+                </div>
+                <div class="user-info-item">
+                  <span class="label">Rol:</span>
+                  <span class="value">{{user.role.description}}</span>
+                </div>
+                <div class="user-info-item">
+                  <span class="label">Email:</span>
+                  <span class="value">{{user.email}}</span>
+                </div>
+              </div>
+              
+              <!-- Mensaje e información si el usuario ya tiene una computadora asignada -->
+              <div *ngIf="userComputer" class="user-has-computer">
+                <div class="alert-message">
+                  <mat-icon color="warn">warning</mat-icon>
+                  <span>El usuario ya tiene una computadora asignada</span>
+                </div>
+                <div class="computer-info-card">
+                  <h4>Detalles de la computadora asignada:</h4>
+                  <div class="computer-info-item">
+                    <span class="label">Modelo:</span>
+                    <span class="value">{{userComputer.computer.model}}</span>
+                  </div>
+                  <div class="computer-info-item">
+                    <span class="label">Número de Serie:</span>
+                    <span class="value">{{userComputer.computer.serialNumber}}</span>
+                  </div>
+                  <div class="computer-info-item">
+                    <span class="label">Especificaciones:</span>
+                    <span class="value">{{userComputer.computer.specs}}</span>
+                  </div>
+                  <div class="computer-info-item">
+                    <span class="label">Fecha de Asignación:</span>
+                    <span class="value">{{userComputer.assignedAt | date:'dd/MM/yyyy HH:mm'}}</span>
+                  </div>
+                  <div class="computer-info-item">
+                    <span class="label">Asignado por:</span>
+                    <span class="value">{{userComputer.assignedBy.name}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Mensaje si el usuario no existe -->
+            <div *ngIf="!user && searched && !loading" class="user-not-found">
+              <mat-icon color="warn">error</mat-icon>
+              <span>Usuario no encontrado</span>
+            </div>
+          </div>          <div class="computer-selection-section">
+            <h2 class="section-title">Selección de Computadora</h2>
+            
+            <!-- Mensaje cuando no se ha encontrado un usuario -->
+            <div *ngIf="!user" class="user-required-message">
+              <mat-icon>info</mat-icon>
+              <span>Debe buscar y seleccionar un usuario válido primero</span>
+            </div>
+              <!-- Mensaje cuando el usuario ya tiene una computadora asignada -->
+            <div *ngIf="user && userComputer" class="user-required-message">
+              <mat-icon color="warn">block</mat-icon>
+              <span>No es posible asignar una nueva computadora. El usuario ya tiene una computadora asignada.</span>
+            </div>
+              
+            <ng-container *ngIf="user && userComputer; else normalSelect">
+              <!-- Selector deshabilitado para usuarios con computadora -->
+              <mat-form-field class="computer-select-field disabled-field">
+                <mat-label>Selección no disponible</mat-label>
+                <input matInput disabled placeholder="Usuario ya tiene computadora asignada" readonly>
+                <mat-icon matSuffix color="warn">computer_off</mat-icon>
+              </mat-form-field>
+            </ng-container>
+            
+            <ng-template #normalSelect>
+              <!-- Selector normal para usuarios sin computadora -->
+              <mat-form-field class="computer-select-field">
+                <mat-label>Seleccione una computadora</mat-label>
+                <mat-select formControlName="computerId" [disabled]="!user">
+                  <mat-option *ngFor="let computer of computers" [value]="computer.id">
+                    {{computer.model}} ({{computer.serialNumber}})
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="assignmentForm.get('computerId')?.hasError('required')">
+                  Debe seleccionar una computadora
+                </mat-error>
+              </mat-form-field>
+            </ng-template>
+            
+            <!-- Detalles de la computadora seleccionada -->
+            <div *ngIf="assignmentForm.get('computerId')?.value" class="computer-details">
+              <div class="computer-info">
+                <h3>Especificaciones:</h3>
+                <p>{{(computers | find: 'id': assignmentForm.get('computerId')?.value)?.specs}}</p>
+              </div>
+            </div>
+          </div>
+            <div class="submit-container">            <button 
+              mat-raised-button 
+              color="primary" 
+              type="submit" 
+              [disabled]="assignmentForm.invalid || loading || !user || !!userComputer">
+              <mat-icon>computer</mat-icon>
+              Asignar Computadora
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </form>
+  </div>
+</div>

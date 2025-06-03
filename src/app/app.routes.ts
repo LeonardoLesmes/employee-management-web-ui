@@ -19,11 +19,15 @@ export const routes: Routes = [
         path: 'request-access',
         canActivate: [tokenGuard],
         loadComponent: () => import('./pages/request-access/request-access.component').then(m => m.RequestAccessComponent),
-    },
-    {
+    },    {
         path: 'requests',
         canActivate: [tokenGuard],
         loadComponent: () => import('./pages/requests/requests.component').then(m => m.RequestsComponent),
+    },
+    {
+        path: 'assign-computer',
+        canActivate: [tokenGuard],
+        loadComponent: () => import('./pages/computer/computer/computer.component').then(m => m.ComputerComponent),
     },
     
     { path: '', redirectTo: '/login', pathMatch: 'full' },
