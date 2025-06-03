@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +12,9 @@ import { Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { Role } from '../../core/models/role.model';
 import { UserService } from '../../core/services/user/user.service';
+import { StorageService } from '../../core/services/storage/storage.service';
+import { User } from '../../core/models/user.model';
+import { CreateUser } from '../../core/models/create-user';
 
 @Component({
   selector: 'app-create-user',
@@ -33,14 +36,18 @@ import { UserService } from '../../core/services/user/user.service';
   styleUrl: './create-user.component.scss'
 })
 export class CreateUserComponent implements OnInit {
-  userForm: FormGroup;
+  public userForm: FormGroup;
   public roles = signal<Role[]>([]);
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly snackBar: MatSnackBar,
-    private readonly router: Router,
-    private readonly userService: UserService
-  ) {
+
+  private user: User | null = null;
+  
+  private readonly fb = inject(FormBuilder);
+  private readonly snackBar = inject(MatSnackBar)
+  private readonly router = inject(Router);
+  private readonly userService = inject(UserService)
+  private readonly storage = inject(StorageService);
+  
+  constructor() {
     this.userForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
@@ -50,53 +57,53 @@ export class CreateUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Get roles from the user service
     this.userService.getRoles().subscribe(roles => {
       this.roles.set(roles);
     });
+    this.user = this.storage.getItem<User>('user');
+
+    if (this.user == null || Object.keys(this.user).length === 0) {
+      this.snackBar.open('No se encontró información del usuario', 'Cerrar', {
+        duration: 3000,
+        panelClass: 'error-snackbar'
+      });
+      this.router.navigate(['/login']);
+    }
   }
-  onSubmit(): void {
+
+  public onSubmit(): void {
     if (this.userForm.valid) {
-      // Use the user service to create the user
-      this.userService.createUser(this.userForm.value).subscribe({
-        next: (response) => {
-          console.log('User created:', response);
+      const createUser: CreateUser = {
+        name: this.userForm.value.name,
+        email: this.userForm.value.email,
+        department: this.userForm.value.area,
+        roleId: this.userForm.value.roleId,
+        assignedBy: this.user?.id as number   
+      }
+      this.userService.createUser(createUser).subscribe({
+        next: () => {
           this.snackBar.open('Usuario creado con éxito', 'Cerrar', {
-            duration: 3000,
+            duration: 2000,
             panelClass: 'success-snackbar'
           });
-          
-          // Reset form
-          this.userForm.reset();
-        
-          setTimeout(() => this.router.navigate(['/dashboard']), 3000);
+          this.router.navigate(['/dashboard']);
         },
-        error: (error) => {
-          console.error('Error creating user:', error);
+        error: () => {
           this.snackBar.open('Error al crear el usuario', 'Cerrar', {
             duration: 3000,
             panelClass: 'error-snackbar'
           });
         }
       });
-    } else {
-      this.markFormGroupTouched(this.userForm);
-      
-      this.snackBar.open('Por favor complete todos los campos requeridos', 'Cerrar', {
-        duration: 3000,
-        panelClass: 'error-snackbar'
-      });
-    }
-  }
-
-  private markFormGroupTouched(formGroup: FormGroup) {
-    Object.values(formGroup.controls).forEach(control => {
-      control.markAsTouched();
-    });
+    }    
   }
 
   hasError(controlName: string, errorName: string): boolean {
     const control = this.userForm.get(controlName);
     return !!(control && control.touched && control.hasError(errorName));
+  }
+  
+  get isSubmitDisabled(): boolean {
+    return this.userForm.invalid;
   }
 }

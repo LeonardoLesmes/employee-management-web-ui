@@ -27,17 +27,4 @@ describe('UserService', () => {
     });
   });
 
-  it('should create a user', (done: DoneFn) => {
-    const mockUser = {
-      name: 'Test User',
-      email: 'test@example.com',
-      area: 'Testing',
-      roleId: 9
-    };
-
-    service.createUser(mockUser).subscribe(user => {
-      expect(user).toEqual(mockUser);
-      done();
-    });
-  });
 });

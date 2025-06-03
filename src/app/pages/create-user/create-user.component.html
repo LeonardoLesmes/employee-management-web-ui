@@ -54,19 +54,18 @@
               El rol es requerido
             </mat-error>
           </mat-form-field>
-          
-          <div class="form-actions">
+            <div class="form-actions">
             <button 
               mat-button 
               type="button" 
               routerLink="/dashboard"
               color="basic">
               Cancelar
-            </button>
-            <button 
+            </button>            <button 
               mat-raised-button 
               type="submit" 
-              color="primary">
+              color="primary"
+              [disabled]="isSubmitDisabled">
               Crear Usuario
             </button>
           </div>

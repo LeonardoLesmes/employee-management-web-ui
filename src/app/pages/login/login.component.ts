@@ -9,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { LoginService } from '../../core/services/login/login.service';
+import { User } from '../../core/models/user.model';
+import { StorageService } from '../../core/services/storage/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -32,6 +34,7 @@ export class LoginComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly storage = inject(StorageService);
 
   constructor() {
     this.loginForm = this.fb.group({
@@ -52,8 +55,9 @@ export class LoginComponent implements OnInit {
         this.loginForm.value.password
       ).subscribe({
         next: (res) => {
-          localStorage.setItem('user', JSON.stringify(res));
-          localStorage.setItem('token', res.token);
+          const user: User = { id: res.id, name: res.name, role: res.role };
+          this.storage.setItem('user', user);
+          this.storage.setItem('token', res.token);
           this.router.navigate(['/dashboard']);
         },
         error: () => {
