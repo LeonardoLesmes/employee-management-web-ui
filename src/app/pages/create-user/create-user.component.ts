@@ -14,7 +14,7 @@ import { Role } from '../../core/models/role.model';
 import { UserService } from '../../core/services/user/user.service';
 import { StorageService } from '../../core/services/storage/storage.service';
 import { User } from '../../core/models/user.model';
-import { CreateUser } from '../../core/models/create-user';
+import { UserReq } from '../../core/models/user-req';
 
 @Component({
   selector: 'app-create-user',
@@ -73,7 +73,7 @@ export class CreateUserComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.userForm.valid) {
-      const createUser: CreateUser = {
+      const createUser: UserReq = {
         name: this.userForm.value.name,
         email: this.userForm.value.email,
         department: this.userForm.value.area,

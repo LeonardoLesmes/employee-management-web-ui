@@ -1,0 +1,22 @@
+.request-details {
+  padding: 10px 0;
+  
+  p {
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  
+  strong {
+    font-weight: 500;
+    margin-right: 5px;
+  }
+}
+
+mat-dialog-content {
+  min-width: 300px;
+  max-width: 500px;
+}
+
+mat-dialog-actions {
+  margin-top: 10px;
+}

@@ -30,9 +30,7 @@ export class HeaderComponent {
   } 
   
   viewRequests() {
-    const requestsSection = document.querySelector('.requests-container');
-    if (requestsSection) {
-      requestsSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    this.router.navigate(['/requests']);
+    
   }
 }

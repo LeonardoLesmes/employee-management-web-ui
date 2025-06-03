@@ -1,4 +1,4 @@
-export interface CreateUser {
+export interface UserReq {
     name: string;
     email: string;
     department: string;

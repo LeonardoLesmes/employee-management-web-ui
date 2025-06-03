@@ -1,0 +1,168 @@
+.requests-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.requests-content {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.requests-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #212121;
+  text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+
+.requests-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+  
+  .refresh-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
+    }
+  }
+}
+
+.requests-table-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.requests-table {
+  width: 100%;
+  
+  th {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: #212121;
+    white-space: nowrap;
+  }
+  
+  td {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  th, td {
+    padding: 16px;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  
+  .action-button {
+    min-width: 0;
+    padding: 0 8px;
+  }
+}
+
+.status-indicator {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-pending .status-indicator {
+  background-color: #fff8e1;
+  color: #ffa000;
+}
+
+.status-approved .status-indicator {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-rejected .status-indicator {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.empty-table {
+  text-align: center;
+  padding: 2rem !important;
+  font-style: italic;
+  color: #757575;
+}
+
+// Media queries para responsividad
+@media (max-width: 992px) {
+  .requests-content {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .requests-content {
+    padding: 1rem;
+  }
+  
+  .requests-title {
+    font-size: 1.5rem;
+  }
+  
+  .requests-table {
+    th, td {
+      padding: 12px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .requests-content {
+    padding: 0.75rem;
+  }
+  
+  .requests-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .requests-actions {
+    margin-bottom: 1rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .requests-table {
+    th, td {
+      padding: 8px;
+    }
+  }
+}
