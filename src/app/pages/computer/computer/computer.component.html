@@ -37,7 +37,6 @@
                 mat-raised-button 
                 color="primary" 
                 type="button"
-                [disabled]="assignmentForm.get('userId')?.invalid || loading"
                 (click)="searchUser()">
                 <mat-icon>search</mat-icon>
                 Buscar Usuario
