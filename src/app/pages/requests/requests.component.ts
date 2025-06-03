@@ -70,7 +70,7 @@ export class RequestsComponent implements OnInit {
       user: user.name,
       userId: user.id,
       request: 'Creación de usuario',
-      date: user.createdAt,
+      date: new Date(user.createdAt),
       status: this.formatStatus(user.status),
       type: 'user'
     }));
@@ -85,7 +85,7 @@ export class RequestsComponent implements OnInit {
       type: 'access'
     }));
     
-    return [ ...users, ...access ];
+    return [ ...users, ...access ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   private formatStatus(status: string): ReqStatus{

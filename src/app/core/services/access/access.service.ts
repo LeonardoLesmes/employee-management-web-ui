@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { AccessRes } from '../../models/access-res';
 import { Observable, of } from 'rxjs';
 import { System } from '../../models/system.model';
+import { AccessReq } from '../../models/access-req';
 
 @Injectable({
   providedIn: 'root'
@@ -17,5 +18,9 @@ export class AccessService {
   
   public getSystems(): Observable<System[]> {
     return this.http.get<System[]>('http://localhost:8080/api/systems');
+  }
+
+  public createAccessRequest(access: AccessReq): Observable<void> {
+    return this.http.post<void>('http://localhost:8080/api/access-requests', access);
   }
 }

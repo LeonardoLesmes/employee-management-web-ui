@@ -16,6 +16,10 @@ import { System } from '../../core/models/system.model';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { UserRes } from '../../core/models/user-res';
 import { ROLE_PERMISSION_MAP } from '../../core/models/role-permission-map';
+import { StorageService } from '../../core/services/storage/storage.service';
+import { SessionUser } from '../../core/models/user.model';
+import { AccessReq } from '../../core/models/access-req';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-request-access',
@@ -50,6 +54,7 @@ export class RequestAccessComponent implements OnInit {
   private readonly accessService = inject(AccessService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly router = inject(Router);
+  private readonly storage = inject(StorageService);
 
   ngOnInit(): void {
     this.initForm();
@@ -67,14 +72,11 @@ export class RequestAccessComponent implements OnInit {
     this.accessService.getSystems().subscribe({
       next: (systems) => {
         this.systems = systems;
-        this.filteredSystems = []; // Inicialmente vacío hasta que se seleccione un usuario
-        
-        // Creando controles dinamicamente para cada sistema
+        this.filteredSystems = [];
         const systemAccessGroup = this.accessForm.get('systemAccess') as FormGroup;
         systems.forEach(system => {
           systemAccessGroup.addControl(system.id.toString(), this.fb.control(false));
-        });
-        
+        });        
         this.loading = false;
       },
       error: (error) => {
@@ -162,24 +164,30 @@ export class RequestAccessComponent implements OnInit {
     if (this.accessForm.invalid || !this.user || !this.hasSelectedSystems()) {
       return;
     }
-    
+    this.loading = true;
     const selectedSystems = this.getSelectedSystems();
-    console.log('Solicitud de acceso:', {
-      usuario: this.user,
-      sistemasSeleccionados: selectedSystems
-    });
-    
-    this.snackBar.open('Solicitud enviada correctamente', 'Cerrar', {
-      duration: 3000
-    });
-      // Restablece el formulario
-    this.accessForm.reset();
-    this.user = null;
-    this.searched = false;
-    this.filteredSystems = [];
-    
-    // Opcional: navegar al dashboard u otra página
-    // this.router.navigate(['/dashboard']);
+    const sessionUser = this.storage.getItem<SessionUser>('user');
+
+    const accessRequest: AccessReq = {
+      employeeId: this.user.id,
+      systemIds: selectedSystems.map(system => system.id),
+      assignedById: sessionUser?.id as number
+    }
+
+    this.accessService.createAccessRequest(accessRequest)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.snackBar.open('Solicitud enviada correctamente', 'Cerrar', { duration: 3000});
+        },
+        error: () => {
+          this.snackBar.open('Ocurrio un error al tratar de solicitar permisos', 'Cerrar', { duration: 3000 });
+        }
+      });
   }
 
   goBackToDashboard(): void {

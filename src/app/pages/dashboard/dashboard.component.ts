@@ -62,7 +62,7 @@ export class DashboardComponent {
   }
   
   requestAccess() {
-    console.log('Solicitar acceso');
+    this.router.navigate(['/request-access']);
   }
   
   assignComputer() {
