@@ -1,0 +1,29 @@
+.auth-container {
+  min-height: 100vh;
+}
+
+.auth-header {
+  h2 {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0;
+  }
+  margin-bottom: 20px;
+}
+
+button[type="submit"] {
+  transition: all 0.3s ease;
+  
+  &:hover:not([disabled]) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.mat-icon-button {
+  color: #757575;
+}
+
+.auth-actions {
+    margin: 0;
+}
