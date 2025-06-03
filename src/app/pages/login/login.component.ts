@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { LoginService } from '../../core/services/login/login.service';
-import { User } from '../../core/models/user.model';
+import { SessionUser } from '../../core/models/user.model';
 import { StorageService } from '../../core/services/storage/storage.service';
 
 @Component({
@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
         this.loginForm.value.password
       ).subscribe({
         next: (res) => {
-          const user: User = { id: res.id, name: res.name, role: res.role };
+          const user: SessionUser = { id: res.id, name: res.name, role: res.role };
           this.storage.setItem('user', user);
           this.storage.setItem('token', res.token);
           this.router.navigate(['/dashboard']);

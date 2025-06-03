@@ -16,7 +16,7 @@ import { RequestService } from '../../core/services/request/request.service';
 import { RequestRes } from '../../core/models/request-res';
 import { FormartedData } from './models/formated-data';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { User } from '../../core/models/user.model';
+import { SessionUser } from '../../core/models/user.model';
 import { ReqStatus } from './models/req-status';
 
 @Component({
@@ -56,7 +56,7 @@ export class RequestsComponent implements OnInit {
   }
 
   private loadRequests(): void {
-    const user = this.storage.getItem<User>('user');
+    const user = this.storage.getItem<SessionUser>('user');
     if (user) {
       this.requestService.getRequests(user.id).subscribe(data => {
         this.requests.set(data);

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AccessRes } from '../../models/access-res';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { System } from '../../models/system.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,5 +13,9 @@ export class AccessService {
 
   public getAccessByAssignedId(assignedId: number): Observable<AccessRes[]> {
     return this.http.get<AccessRes[]>(`http://localhost:8080/api/access-requests/assigned-by/${assignedId}`);
+  }
+  
+  public getSystems(): Observable<System[]> {
+    return this.http.get<System[]>('http://localhost:8080/api/systems');
   }
 }

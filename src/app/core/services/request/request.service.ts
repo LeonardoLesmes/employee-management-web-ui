@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, map, Observable, of } from 'rxjs';
-import { UserRes } from '../../models/user-res';
+import { combineLatest, map, Observable } from 'rxjs';
 import { RequestRes } from '../../models/request-res';
 import { UserService } from '../user/user.service';
 import { AccessService } from '../access/access.service';
@@ -21,21 +20,5 @@ export class RequestService {
           return { users, access };
         })
     );
-  }
-  
-  public cancelRequest(requestId: number): Observable<boolean> {
-    // En producción, llamaríamos a un endpoint:
-    // return this.http.put<boolean>(`http://localhost:8080/api/requests/${requestId}/cancel`, {});
-    
-    // Para desarrollo, simplemente retornamos éxito
-    return of(true);
-  }
-  
-  public getRequestDetails(requestId: number): Observable<UserRes | undefined> {
-    // En producción, llamaríamos a un endpoint:
-    // return this.http.get<UserRes>(`http://localhost:8080/api/requests/${requestId}`);
-    
-    // Para desarrollo, usamos un mock
-    return of(undefined);
   }
 }

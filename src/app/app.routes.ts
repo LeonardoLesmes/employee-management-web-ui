@@ -16,6 +16,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/create-user/create-user.component').then(m => m.CreateUserComponent),
     },
     {
+        path: 'request-access',
+        canActivate: [tokenGuard],
+        loadComponent: () => import('./pages/request-access/request-access.component').then(m => m.RequestAccessComponent),
+    },
+    {
         path: 'requests',
         canActivate: [tokenGuard],
         loadComponent: () => import('./pages/requests/requests.component').then(m => m.RequestsComponent),

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Role } from '../../models/role.model';
 import { UserReq } from '../../models/user-req';
 import { UserRes } from '../../models/user-res';
@@ -21,5 +21,9 @@ export class UserService {
   
   public getRoles(): Observable<Role[]> {
     return this.http.get<Role[]>('http://localhost:8080/api/roles');
+  }
+  
+  public getUserById(userId: number): Observable<UserRes> {
+    return this.http.get<UserRes>(`http://localhost:8080/api/employees/${userId}`);
   }
 }

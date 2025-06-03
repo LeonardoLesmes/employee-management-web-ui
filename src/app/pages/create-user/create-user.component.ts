@@ -13,7 +13,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { Role } from '../../core/models/role.model';
 import { UserService } from '../../core/services/user/user.service';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { User } from '../../core/models/user.model';
+import { SessionUser } from '../../core/models/user.model';
 import { UserReq } from '../../core/models/user-req';
 
 @Component({
@@ -39,7 +39,7 @@ export class CreateUserComponent implements OnInit {
   public userForm: FormGroup;
   public roles = signal<Role[]>([]);
 
-  private user: User | null = null;
+  private user: SessionUser | null = null;
   
   private readonly fb = inject(FormBuilder);
   private readonly snackBar = inject(MatSnackBar)
@@ -60,7 +60,7 @@ export class CreateUserComponent implements OnInit {
     this.userService.getRoles().subscribe(roles => {
       this.roles.set(roles);
     });
-    this.user = this.storage.getItem<User>('user');
+    this.user = this.storage.getItem<SessionUser>('user');
 
     if (this.user == null || Object.keys(this.user).length === 0) {
       this.snackBar.open('No se encontró información del usuario', 'Cerrar', {
