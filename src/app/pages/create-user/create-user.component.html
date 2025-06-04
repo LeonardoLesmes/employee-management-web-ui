@@ -9,13 +9,19 @@
                 color="accent"
                 class="back-button"
                 (click)="goBackToDashboard()"
+                [disabled]="submitting()"
             >
                 <mat-icon>arrow_back</mat-icon>
                 Volver al Dashboard
             </button>
         </div>
 
-        <mat-card class="user-form-card">
+        <div *ngIf="loading()" class="loading-container">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Cargando roles...</p>
+        </div>
+
+        <mat-card class="user-form-card" *ngIf="!loading()">
             <mat-card-content>
                 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
                     <mat-form-field class="form-field-full">
@@ -24,6 +30,7 @@
                             matInput
                             formControlName="name"
                             placeholder="Ingrese el nombre completo"
+                            [disabled]="submitting()"
                         />
                         <mat-error *ngIf="hasError('name', 'required')">
                             El nombre es requerido
@@ -40,6 +47,7 @@
                             formControlName="email"
                             placeholder="ejemplo@empresa.com"
                             type="email"
+                            [disabled]="submitting()"
                         />
                         <mat-error *ngIf="hasError('email', 'required')">
                             El correo electrónico es requerido
@@ -51,7 +59,12 @@
 
                     <mat-form-field class="form-field-full">
                         <mat-label>Área</mat-label>
-                        <input matInput formControlName="area" placeholder="Departamento o área" />
+                        <input 
+                            matInput 
+                            formControlName="area" 
+                            placeholder="Departamento o área"
+                            [disabled]="submitting()"
+                        />
                         <mat-error *ngIf="hasError('area', 'required')">
                             El área es requerida
                         </mat-error>
@@ -59,7 +72,7 @@
 
                     <mat-form-field class="form-field-full">
                         <mat-label>Rol</mat-label>
-                        <mat-select formControlName="roleId">
+                        <mat-select formControlName="roleId" [disabled]="submitting()">
                             @for (role of roles(); track role.id) {
                                 <mat-option [value]="role.id">
                                     {{ role.type }} - {{ role.description }}
@@ -70,17 +83,26 @@
                             El rol es requerido
                         </mat-error>
                     </mat-form-field>
+                    
                     <div class="form-actions">
-                        <button mat-button type="button" routerLink="/dashboard" color="basic">
+                        <button 
+                            mat-button 
+                            type="button" 
+                            routerLink="/dashboard" 
+                            color="basic"
+                            [disabled]="submitting()"
+                        >
                             Cancelar
                         </button>
                         <button
                             mat-raised-button
                             type="submit"
                             color="primary"
-                            [disabled]="isSubmitDisabled"
+                            [disabled]="!submitting() && userForm.invalid"
                         >
-                            Crear Usuario
+                            <mat-icon *ngIf="submitting()">hourglass_empty</mat-icon>
+                            <mat-icon *ngIf="!submitting()">person_add</mat-icon>
+                            {{ submitting() ? 'Creando...' : 'Crear Usuario' }}
                         </button>
                     </div>
                 </form>

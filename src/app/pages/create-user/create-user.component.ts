@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -8,7 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
+import { finalize } from 'rxjs';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { Role } from '../../core/models/user/role.model';
 import { UserService } from '../../core/services/user/user.service';
@@ -29,6 +31,7 @@ import { UserReq } from '../../core/models/user/user-req';
         MatCardModule,
         MatSnackBarModule,
         MatIconModule,
+        MatProgressSpinnerModule,
         HeaderComponent,
         RouterModule,
     ],
@@ -37,10 +40,12 @@ import { UserReq } from '../../core/models/user/user-req';
     styleUrl: './create-user.component.scss',
 })
 export class CreateUserComponent implements OnInit {
-    public userForm: FormGroup;
-    public roles = signal<Role[]>([]);
-
-    private user: SessionUser | null = null;
+    public readonly userForm: FormGroup;
+    
+    public readonly roles = signal<Role[]>([]);
+    public readonly loading = signal<boolean>(false);
+    public readonly submitting = signal<boolean>(false);
+    private readonly user = signal<SessionUser | null>(null);
 
     private readonly fb = inject(FormBuilder);
     private readonly snackBar = inject(MatSnackBar);
@@ -58,12 +63,35 @@ export class CreateUserComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.userService.getRoles().subscribe(roles => {
-            this.roles.set(roles);
-        });
-        this.user = this.storage.getItem<SessionUser>('user');
+        this.loadRoles();
+        this.loadUser();
+    }
 
-        if (this.user == null || Object.keys(this.user).length === 0) {
+    private loadRoles(): void {
+        this.loading.set(true);
+        this.userService.getRoles()
+            .pipe(
+                finalize(() => this.loading.set(false))
+            )
+            .subscribe({
+                next: roles => {
+                    this.roles.set(roles);
+                },
+                error: error => {
+                    console.error('Error al cargar roles:', error);
+                    this.snackBar.open('Error al cargar los roles', 'Cerrar', {
+                        duration: 3000,
+                        panelClass: 'error-snackbar',
+                    });
+                }
+            });
+    }
+
+    private loadUser(): void {
+        const sessionUser = this.storage.getItem<SessionUser>('user');
+        this.user.set(sessionUser);
+
+        if (!sessionUser || Object.keys(sessionUser).length === 0) {
             this.snackBar.open('No se encontró información del usuario', 'Cerrar', {
                 duration: 3000,
                 panelClass: 'error-snackbar',
@@ -73,41 +101,46 @@ export class CreateUserComponent implements OnInit {
     }
 
     public onSubmit(): void {
-        if (this.userForm.valid) {
+        if (this.userForm.valid && !this.submitting()) {
+            this.submitting.set(true);
+            
             const createUser: UserReq = {
                 name: this.userForm.value.name,
                 email: this.userForm.value.email,
                 department: this.userForm.value.area,
                 roleId: this.userForm.value.roleId,
-                assignedBy: this.user?.id as number,
+                assignedBy: this.user()?.id as number,
             };
-            this.userService.createUser(createUser).subscribe({
-                next: () => {
-                    this.snackBar.open('Usuario creado con éxito', 'Cerrar', {
-                        duration: 2000,
-                        panelClass: 'success-snackbar',
-                    });
-                    this.router.navigate(['/dashboard']);
-                },
-                error: () => {
-                    this.snackBar.open('Error al crear el usuario', 'Cerrar', {
-                        duration: 3000,
-                        panelClass: 'error-snackbar',
-                    });
-                },
-            });
+            
+            this.userService.createUser(createUser)
+                .pipe(
+                    finalize(() => this.submitting.set(false))
+                )
+                .subscribe({
+                    next: () => {
+                        this.snackBar.open('Usuario creado con éxito', 'Cerrar', {
+                            duration: 2000,
+                            panelClass: 'success-snackbar',
+                        });
+                        this.router.navigate(['/dashboard']);
+                    },
+                    error: error => {
+                        console.error('Error al crear usuario:', error);
+                        this.snackBar.open('Error al crear el usuario', 'Cerrar', {
+                            duration: 3000,
+                            panelClass: 'error-snackbar',
+                        });
+                    },
+                });
         }
     }
-    hasError(controlName: string, errorName: string): boolean {
+
+    public hasError(controlName: string, errorName: string): boolean {
         const control = this.userForm.get(controlName);
         return !!(control && control.touched && control.hasError(errorName));
     }
 
-    get isSubmitDisabled(): boolean {
-        return this.userForm.invalid;
-    }
-
-    goBackToDashboard(): void {
+    public goBackToDashboard(): void {
         this.router.navigate(['/dashboard']);
     }
 }
