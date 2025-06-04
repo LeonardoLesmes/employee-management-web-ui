@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -12,9 +12,13 @@ import { MatIconModule } from '@angular/material/icon';
     styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-    constructor(private readonly router: Router) {}
+    private readonly router = inject(Router);
 
-    logout() {
+    public logout() {
         this.router.navigate(['/login']);
+    }
+
+    public goToDashboard() {
+        this.router.navigate(['/dashboard']);
     }
 }

@@ -58,42 +58,9 @@ h6 {
     font-weight: 500;
 }
 
-.auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    background: linear-gradient(to bottom right, #f5f5f5, #e0e0e0);
-}
-
-.auth-card {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.auth-header {
-    background-color: #212121;
-    color: white;
-    padding: 24px;
-    text-align: center;
-}
-
-.auth-content {
-    padding: 24px;
-}
-
 .form-field-full {
     width: 100%;
     margin-bottom: 16px;
-}
-
-.auth-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 16px;
 }
 
 .mat-mdc-form-field {

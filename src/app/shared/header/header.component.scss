@@ -8,6 +8,7 @@
     width: 100%;
     box-sizing: border-box;
     position: relative;
+    background-color: var(--mat-sys-primary);
 }
 
 .header-title {
@@ -17,6 +18,8 @@
     white-space: normal;
     line-height: 1.2;
     margin: 8px 0;
+    color: white;
+    cursor: pointer;
 }
 
 .header-actions {
@@ -38,7 +41,7 @@
 
 .logout-btn {
     transition: all 0.2s ease;
-
+    color: white;
     &:hover {
         background-color: rgba(255, 255, 255, 0.1);
     }
@@ -66,7 +69,7 @@
         top: 30px;
         right: 16px;
         z-index: 1000;
-        background-color: #3f51b5;
+        background-color: #404fa3;
         color: white;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
