@@ -3,8 +3,7 @@
   
   <div class="dashboard-content">
     <h1 class="dashboard-title">Gestión de Ingresos y Recursos de Equipo</h1>
-    
-    <div class="dashboard-cards">
+      <div class="dashboard-cards">
       <mat-card class="feature-card">
         <mat-card-header>
           <div mat-card-avatar class="feature-icon user-icon">
@@ -49,38 +48,21 @@
           <button mat-raised-button color="primary" (click)="assignComputer()">Asignar computador</button>
         </mat-card-actions>
       </mat-card>
-    </div>
-    
-    <div class="requests-container">
-      <h2>Solicitudes Recientes 
-        <span *ngIf="requests.length > 0" [matBadge]="requests.length" matBadgeColor="accent" matBadgeOverlap="false"></span>
-      </h2>
-        <div class="table-responsive">
-        <table class="requests-table">
-          <thead>
-            <tr>
-              <th>Persona</th>
-              <th>Solicitud</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let request of requests" [ngClass]="getStatusClass(request.status)">
-              <td data-label="Persona">{{ request.person }}</td>
-              <td data-label="Solicitud">{{ request.type }}</td>
-              <td data-label="Estado">
-                <span class="status-indicator">{{ request.status | titlecase }}</span>
-              </td>
-              <td data-label="Acciones">
-                <button mat-stroked-button (click)="viewDetails(request.id)">
-                  Ver detalles
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      
+      <mat-card class="feature-card">
+        <mat-card-header>
+          <div mat-card-avatar class="feature-icon list-icon">
+            <mat-icon>list_alt</mat-icon>
+          </div>
+          <mat-card-title>Gestión de Solicitudes</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Visualizar y gestionar todas las solicitudes pendientes y completadas.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="viewAllRequests()">Ver solicitudes</button>
+        </mat-card-actions>
+      </mat-card>
     </div>
   </div>
 </div>

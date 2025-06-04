@@ -20,17 +20,9 @@ import { StorageService } from '../../core/services/storage/storage.service';
 })
 export class HeaderComponent {
 
-  private readonly storage = inject(StorageService);
-
   constructor(private readonly router: Router) {}
 
-  logout() {
-    this.storage.clear();    
+  logout() {  
     this.router.navigate(['/login']);
-  } 
-  
-  viewRequests() {
-    this.router.navigate(['/requests']);
-    
   }
 }
