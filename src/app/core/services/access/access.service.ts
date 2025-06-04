@@ -4,6 +4,7 @@ import { AccessRes } from '../../models/access-res';
 import { Observable, of } from 'rxjs';
 import { System } from '../../models/system.model';
 import { AccessReq } from '../../models/access-req';
+import { environment } from '../../../environments/environment.prod';
 
 @Injectable({
     providedIn: 'root',
@@ -13,15 +14,15 @@ export class AccessService {
 
     public getAccessByAssignedId(assignedId: number): Observable<AccessRes[]> {
         return this.http.get<AccessRes[]>(
-            `http://localhost:8080/api/access-requests/assigned-by/${assignedId}`
+            `${environment.resources.access.assignedBy}/${assignedId}`
         );
     }
 
     public getSystems(): Observable<System[]> {
-        return this.http.get<System[]>('http://localhost:8080/api/systems');
+        return this.http.get<System[]>(environment.resources.access.systems);
     }
 
     public createAccessRequest(access: AccessReq): Observable<void> {
-        return this.http.post<void>('http://localhost:8080/api/access-requests', access);
+        return this.http.post<void>(environment.resources.access.base, access);
     }
 }
