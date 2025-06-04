@@ -2,5 +2,3 @@ node_modules/
 dist/
 .angular/
 coverage/
-
-# Otros archivos que no quieres formatear

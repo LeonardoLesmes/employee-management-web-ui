@@ -4,19 +4,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../shared/header/header.component';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [
-        CommonModule,
-        MatCardModule,
-        MatButtonModule,
-        MatIconModule,
-        HeaderComponent,
-        RouterModule,
-    ],
+    imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, HeaderComponent, RouterModule],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',
 })

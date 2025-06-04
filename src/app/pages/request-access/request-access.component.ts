@@ -1,12 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-    FormBuilder,
-    FormGroup,
-    FormsModule,
-    ReactiveFormsModule,
-    Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -18,13 +12,13 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UserService } from '../../core/services/user/user.service';
 import { AccessService } from '../../core/services/access/access.service';
-import { System } from '../../core/models/system.model';
-import { HeaderComponent } from '../../shared/header/header.component';
-import { UserRes } from '../../core/models/user-res';
+import { System } from '../../core/models/access/system.model';
+import { HeaderComponent } from '../../shared/components/header/header.component';
+import { UserRes } from '../../core/models/user/user-res';
 import { ROLE_PERMISSION_MAP } from '../../core/models/role-permission-map';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { SessionUser } from '../../core/models/user.model';
-import { AccessReq } from '../../core/models/access-req';
+import { SessionUser } from '../../core/models/user/session.model';
+import { AccessReq } from '../../core/models/access/access-req';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -126,14 +120,10 @@ export class RequestAccessComponent implements OnInit {
             systemAccessGroup.get(controlName)?.setValue(false);
         });
 
-        const roleMapping = ROLE_PERMISSION_MAP.find(
-            mapping => mapping.roleId === this.user?.role.id
-        );
+        const roleMapping = ROLE_PERMISSION_MAP.find(mapping => mapping.roleId === this.user?.role.id);
 
         if (roleMapping) {
-            this.filteredSystems = this.systems.filter(system =>
-                roleMapping.allowedSystemIds.includes(system.id)
-            );
+            this.filteredSystems = this.systems.filter(system => roleMapping.allowedSystemIds.includes(system.id));
         } else {
             this.filteredSystems = [];
             console.warn(`No permission mapping found for role ID: ${this.user?.role.id}`);
@@ -192,11 +182,7 @@ export class RequestAccessComponent implements OnInit {
                     });
                 },
                 error: () => {
-                    this.snackBar.open(
-                        'Ocurrio un error al tratar de solicitar permisos',
-                        'Cerrar',
-                        { duration: 3000 }
-                    );
+                    this.snackBar.open('Ocurrio un error al tratar de solicitar permisos', 'Cerrar', { duration: 3000 });
                 },
             });
     }

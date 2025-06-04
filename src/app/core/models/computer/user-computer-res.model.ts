@@ -1,4 +1,4 @@
-import { StatusType } from '../types/status.types';
+import { StatusType } from '../../../shared/types/status.types';
 
 export interface UserComputerRes {
     id: number;

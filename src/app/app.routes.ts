@@ -38,7 +38,6 @@ export const routes: Routes = [
         loadComponent: () =>
             import('./pages/computer/computer.component').then(m => m.ComputerComponent),
     },
-
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: '**', redirectTo: '/login' },
 ];

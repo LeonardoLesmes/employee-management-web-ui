@@ -10,7 +10,6 @@
         "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
         "format:check": "prettier --check \"src/**/*.{ts,html,scss}\""
     },
-    "private": true,
     "dependencies": {
         "@angular/animations": "^19.2.14",
         "@angular/cdk": "^19.2.18",

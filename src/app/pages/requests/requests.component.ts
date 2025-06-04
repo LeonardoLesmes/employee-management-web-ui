@@ -11,12 +11,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { HeaderComponent } from '../../shared/header/header.component';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 import { RequestService } from '../../core/services/request/request.service';
 import { RequestRes } from '../../core/models/request-res';
 import { FormartedData } from './models/formated-data';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { SessionUser } from '../../core/models/user.model';
+import { SessionUser } from '../../core/models/user/session.model';
 import { ReqStatus } from './models/req-status';
 
 @Component({
@@ -106,9 +106,7 @@ export class RequestsComponent implements OnInit {
             })
         );
 
-        return [...users, ...access, ...computers].sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
+        return [...users, ...access, ...computers].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     }
 
     private formatStatus(status: string): ReqStatus {

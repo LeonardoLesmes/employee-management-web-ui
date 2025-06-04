@@ -9,12 +9,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
-import { HeaderComponent } from '../../shared/header/header.component';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 import { Role } from '../../core/models/role.model';
 import { UserService } from '../../core/services/user/user.service';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { SessionUser } from '../../core/models/user.model';
-import { UserReq } from '../../core/models/user-req';
+import { SessionUser } from '../../core/models/user/session.model';
+import { UserReq } from '../../core/models/user/user-req';
 
 @Component({
     selector: 'app-create-user',

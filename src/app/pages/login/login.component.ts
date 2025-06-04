@@ -9,21 +9,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { LoginService } from '../../core/services/login/login.service';
-import { SessionUser } from '../../core/models/user.model';
+import { SessionUser } from '../../core/models/user/session.model';
 import { StorageService } from '../../core/services/storage/storage.service';
 
 @Component({
     selector: 'app-login',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        MatSnackBarModule,
-    ],
+    imports: [CommonModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatSnackBarModule],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss',
 })
@@ -50,10 +41,7 @@ export class LoginComponent implements OnInit {
 
     onSubmit(): void {
         if (this.loginForm.valid) {
-            this.LoginService.login(
-                this.loginForm.value.email,
-                this.loginForm.value.password
-            ).subscribe({
+            this.LoginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
                 next: res => {
                     const user: SessionUser = {
                         id: res.id,
@@ -95,8 +83,6 @@ export class LoginComponent implements OnInit {
             return 'Debes ingresar una contraseña';
         }
 
-        return passwordControl.hasError('minlength')
-            ? 'La contraseña debe tener al menos 6 caracteres'
-            : '';
+        return passwordControl.hasError('minlength') ? 'La contraseña debe tener al menos 6 caracteres' : '';
     }
 }

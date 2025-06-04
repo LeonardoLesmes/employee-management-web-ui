@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { AccessRes } from '../../models/access-res';
+import { AccessRes } from '../../models/access/access-res';
 import { Observable, of } from 'rxjs';
-import { System } from '../../models/system.model';
-import { AccessReq } from '../../models/access-req';
-import { environment } from '../../../environments/environment.prod';
+import { System } from '../../models/access/system.model';
+import { AccessReq } from '../../models/access/access-req';
+import { environment } from '../../../../environments/environment.prod';
 
 @Injectable({
     providedIn: 'root',
@@ -13,9 +13,7 @@ export class AccessService {
     private readonly http = inject(HttpClient);
 
     public getAccessByAssignedId(assignedId: number): Observable<AccessRes[]> {
-        return this.http.get<AccessRes[]>(
-            `${environment.resources.access.assignedBy}/${assignedId}`
-        );
+        return this.http.get<AccessRes[]>(`${environment.resources.access.assignedBy}/${assignedId}`);
     }
 
     public getSystems(): Observable<System[]> {

@@ -1,12 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-    FormBuilder,
-    FormGroup,
-    FormsModule,
-    ReactiveFormsModule,
-    Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,14 +13,14 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { UserService } from '../../core/services/user/user.service';
 import { ComputerService } from '../../core/services/computer/computer.service';
-import { UserComputerRes } from '../../core/models/user-computer-res.model';
-import { UserRes } from '../../core/models/user-res';
-import { HeaderComponent } from '../../shared/header/header.component';
+import { UserComputerRes } from '../../core/models/computer/user-computer-res.model';
+import { UserRes } from '../../core/models/user/user-res';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { SessionUser } from '../../core/models/user.model';
-import { UserComputerReq } from '../../core/models/user-computer-req.model';
+import { SessionUser } from '../../core/models/user/session.model';
+import { UserComputerReq } from '../../core/models/computer/user-computer-req.model';
 import { FindPipe } from '../../shared/pipes/find.pipe';
-import { ComputerDetails } from '../../core/models/computer-details';
+import { ComputerDetails } from '../../core/models/computer/computer-details';
 
 @Component({
     selector: 'app-computer',

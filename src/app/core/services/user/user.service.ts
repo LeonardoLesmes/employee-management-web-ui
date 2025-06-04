@@ -2,9 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Role } from '../../models/role.model';
-import { UserReq } from '../../models/user-req';
-import { UserRes } from '../../models/user-res';
-import { environment } from '../../../environments/environment.prod';
+import { UserReq } from '../../models/user/user-req';
+import { UserRes } from '../../models/user/user-res';
+import { environment } from '../../../../environments/environment.prod';
 
 @Injectable({
     providedIn: 'root',
@@ -17,9 +17,7 @@ export class UserService {
     }
 
     public getUsersByAssignedId(assignedId: number): Observable<UserRes[]> {
-        return this.http.get<UserRes[]>(
-            `${environment.resources.employees.assignedBy}/${assignedId}`
-        );
+        return this.http.get<UserRes[]>(`${environment.resources.employees.assignedBy}/${assignedId}`);
     }
 
     public getRoles(): Observable<Role[]> {
