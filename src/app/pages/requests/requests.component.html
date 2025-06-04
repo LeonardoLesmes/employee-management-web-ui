@@ -1,94 +1,114 @@
 <div class="requests-container">
-  <app-header></app-header>
-  
-  <div class="requests-content">
-    <h1 class="requests-title">Gestión de Solicitudes</h1>
-      <div class="requests-actions">
-      <button 
-        mat-raised-button 
-        color="accent" 
-        class="back-button"
-        (click)="goBackToDashboard()"
-        matTooltip="Volver al Dashboard">
-        <mat-icon>arrow_back</mat-icon>
-        Volver al Dashboard
-      </button>
-      <button 
-        mat-raised-button 
-        color="primary" 
-        class="refresh-button"
-        (click)="refreshRequests()"
-        matTooltip="Actualizar solicitudes">
-        <mat-icon>refresh</mat-icon>
-        Actualizar
-      </button>
-    </div>      <mat-card class="requests-table-card">
-      <mat-card-content>
-        <!-- Tabla para pantallas medianas y grandes -->
-        <div class="table-container desktop-table">          
-            <table mat-table [dataSource]="dataSource()" class="mat-elevation-z0 requests-table">
-            
-            <!-- ID Column -->
-            <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let request">{{request.userId}}</td>
-            </ng-container>
-            
-            <!-- Usuario Column -->
-            <ng-container matColumnDef="user">
-              <th mat-header-cell *matHeaderCellDef>Usuario</th>
-              <td mat-cell *matCellDef="let request">{{request.user}}</td>
-            </ng-container>
-            
-            <!-- Solicitud Column -->
-            <ng-container matColumnDef="request">
-              <th mat-header-cell *matHeaderCellDef>Solicitud</th>
-              <td mat-cell *matCellDef="let request">{{request.request}}</td>
-            </ng-container>
-            
-            <!-- Fecha Column -->
-            <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef>Fecha Solicitud</th>
-              <td mat-cell *matCellDef="let request">{{request.date | date:'dd/MM/yyyy'}}</td>
-            </ng-container>
-              
-            <!-- Estado Column -->
-            <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>Estado</th>
-              <td mat-cell *matCellDef="let request">
-                <span class="status-indicator" [ngClass]="getStatusClass(request.status)">{{request.status | titlecase}}</span>
-              </td>
-            </ng-container>
-            
-            <tr mat-header-row *matHeaderRowDef="['id', 'user', 'request', 'date', 'status']"></tr>
-            <tr mat-row *matRowDef="let row; columns: ['id', 'user', 'request', 'date', 'status'];"></tr>
-          </table>
+    <app-header></app-header>
+
+    <div class="requests-content">
+        <h1 class="requests-title">Gestión de Solicitudes</h1>
+        <div class="requests-actions">
+            <button
+                mat-raised-button
+                color="accent"
+                class="back-button"
+                (click)="goBackToDashboard()"
+                matTooltip="Volver al Dashboard"
+            >
+                <mat-icon>arrow_back</mat-icon>
+                Volver al Dashboard
+            </button>
+            <button
+                mat-raised-button
+                color="primary"
+                class="refresh-button"
+                (click)="refreshRequests()"
+                matTooltip="Actualizar solicitudes"
+            >
+                <mat-icon>refresh</mat-icon>
+                Actualizar
+            </button>
         </div>
-        
-        <!-- Versión mobile de la tabla (tarjetas) -->
-        <div class="mobile-cards">
-          <div class="request-card" *ngFor="let request of dataSource()">
-            <div class="request-header">
-              <span class="request-title">{{request.request}}</span>
-              <span class="status-indicator" [ngClass]="getStatusClass(request.status)">{{request.status | titlecase}}</span>
-            </div>
-            <div class="request-body">
-              <div class="request-detail">
-                <span class="detail-label">ID:</span>
-                <span class="detail-value">{{request.userId}}</span>
-              </div>
-              <div class="request-detail">
-                <span class="detail-label">Usuario:</span>
-                <span class="detail-value">{{request.user}}</span>
-              </div>
-              <div class="request-detail">
-                <span class="detail-label">Fecha:</span>
-                <span class="detail-value">{{request.date | date:'dd/MM/yyyy'}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+        <mat-card class="requests-table-card">
+            <mat-card-content>
+                <div class="table-container desktop-table">
+                    <table
+                        mat-table
+                        [dataSource]="dataSource()"
+                        class="mat-elevation-z0 requests-table"
+                    >
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef>ID</th>
+                            <td mat-cell *matCellDef="let request">{{ request.userId }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="user">
+                            <th mat-header-cell *matHeaderCellDef>Usuario</th>
+                            <td mat-cell *matCellDef="let request">{{ request.user }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="request">
+                            <th mat-header-cell *matHeaderCellDef>Solicitud</th>
+                            <td mat-cell *matCellDef="let request">{{ request.request }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>Fecha Solicitud</th>
+                            <td mat-cell *matCellDef="let request">
+                                {{ request.date | date: 'dd/MM/yyyy' }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef>Estado</th>
+                            <td mat-cell *matCellDef="let request">
+                                <span
+                                    class="status-indicator"
+                                    [ngClass]="getStatusClass(request.status)"
+                                    >{{ request.status | titlecase }}</span
+                                >
+                            </td>
+                        </ng-container>
+
+                        <tr
+                            mat-header-row
+                            *matHeaderRowDef="['id', 'user', 'request', 'date', 'status']"
+                        ></tr>
+                        <tr
+                            mat-row
+                            *matRowDef="
+                                let row;
+                                columns: ['id', 'user', 'request', 'date', 'status']
+                            "
+                        ></tr>
+                    </table>
+                </div>
+
+                <div class="mobile-cards">
+                    <div class="request-card" *ngFor="let request of dataSource()">
+                        <div class="request-header">
+                            <span class="request-title">{{ request.request }}</span>
+                            <span
+                                class="status-indicator"
+                                [ngClass]="getStatusClass(request.status)"
+                                >{{ request.status | titlecase }}</span
+                            >
+                        </div>
+                        <div class="request-body">
+                            <div class="request-detail">
+                                <span class="detail-label">ID:</span>
+                                <span class="detail-value">{{ request.userId }}</span>
+                            </div>
+                            <div class="request-detail">
+                                <span class="detail-label">Usuario:</span>
+                                <span class="detail-value">{{ request.user }}</span>
+                            </div>
+                            <div class="request-detail">
+                                <span class="detail-label">Fecha:</span>
+                                <span class="detail-value">{{
+                                    request.date | date: 'dd/MM/yyyy'
+                                }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
 </div>

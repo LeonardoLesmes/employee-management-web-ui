@@ -9,27 +9,36 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         canActivate: [tokenGuard],
-        loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
-    },    {
+        loadComponent: () =>
+            import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    },
+    {
         path: 'create-user',
         canActivate: [tokenGuard],
-        loadComponent: () => import('./pages/create-user/create-user.component').then(m => m.CreateUserComponent),
+        loadComponent: () =>
+            import('./pages/create-user/create-user.component').then(m => m.CreateUserComponent),
     },
     {
         path: 'request-access',
         canActivate: [tokenGuard],
-        loadComponent: () => import('./pages/request-access/request-access.component').then(m => m.RequestAccessComponent),
-    },    {
+        loadComponent: () =>
+            import('./pages/request-access/request-access.component').then(
+                m => m.RequestAccessComponent
+            ),
+    },
+    {
         path: 'requests',
         canActivate: [tokenGuard],
-        loadComponent: () => import('./pages/requests/requests.component').then(m => m.RequestsComponent),
+        loadComponent: () =>
+            import('./pages/requests/requests.component').then(m => m.RequestsComponent),
     },
     {
         path: 'assign-computer',
         canActivate: [tokenGuard],
-        loadComponent: () => import('./pages/computer/computer/computer.component').then(m => m.ComputerComponent),
+        loadComponent: () =>
+            import('./pages/computer/computer/computer.component').then(m => m.ComputerComponent),
     },
-    
+
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: '**', redirectTo: '/login' }
+    { path: '**', redirectTo: '/login' },
 ];

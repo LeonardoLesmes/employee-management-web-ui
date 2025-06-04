@@ -1,161 +1,158 @@
 .create-user-container {
-  min-height: 100vh;
-  background-color: #f8f9fa;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow-x: hidden;
-  position: relative;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
 }
 
 .create-user-content {
-  padding: 2rem;
-  max-width: 800px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .create-user-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
-  color: #212121;
-  text-align: center;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-  max-width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: #212121;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
 }
 
 .create-user-actions {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 1.5rem;
-  
-  .back-button {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    
-    mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-      line-height: 18px;
+    justify-content: flex-start;
+    margin-bottom: 1.5rem;
+
+    .back-button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+        }
     }
-  }
 }
 
 .user-form-card {
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-  
-  mat-card-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 1rem;
-  }
+
+    mat-card-content {
+        padding: 1rem;
+    }
 }
 
 .form-field-full {
-  width: 100%;
-  margin-bottom: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
 }
 
 .form-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 2rem;
-  gap: 1rem;
-  
-  button {
-    min-width: 120px;
-    
-    &[disabled] {
-      opacity: 0.7;
-      cursor: not-allowed;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    gap: 1rem;
+
+    button {
+        min-width: 120px;
+
+        &[disabled] {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
     }
-  }
 }
 
-// Success feedback styles
 :host ::ng-deep .success-snackbar {
-  background: #4caf50;
-  color: white;
-  
-  .mat-simple-snackbar-action {
+    background: #4caf50;
     color: white;
-  }
+
+    .mat-simple-snackbar-action {
+        color: white;
+    }
 }
 
-// Styles for the disabled submit button
 :host ::ng-deep button[disabled] {
-  background-color: rgba(0, 0, 0, 0.12) !important;
-  color: rgba(0, 0, 0, 0.38) !important;
-  box-shadow: none !important;
-  
-  &:hover {
     background-color: rgba(0, 0, 0, 0.12) !important;
-  }
+    color: rgba(0, 0, 0, 0.38) !important;
+    box-shadow: none !important;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.12) !important;
+    }
 }
 
-// Media queries for responsive design
 @media (max-width: 768px) {
-  .create-user-content {
-    padding: 1rem;
-  }
-  
-  .create-user-title {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .create-user-actions {
-    margin-bottom: 1rem;
-  }
-  
-  .user-form-card mat-card-content {
-    padding: 0.75rem;
-  }
-  
-  .form-actions {
-    margin-top: 1.5rem;
-  }
+    .create-user-content {
+        padding: 1rem;
+    }
+
+    .create-user-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .create-user-actions {
+        margin-bottom: 1rem;
+    }
+
+    .user-form-card mat-card-content {
+        padding: 0.75rem;
+    }
+
+    .form-actions {
+        margin-top: 1.5rem;
+    }
 }
 
 @media (max-width: 480px) {
-  .create-user-content {
-    padding: 0.75rem;
-  }
-  
-  .create-user-title {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-  }
-  
-  .create-user-actions {
-    margin-bottom: 0.75rem;
-    
-    .back-button {
-      font-size: 0.875rem;
-      padding: 4px 8px;
+    .create-user-content {
+        padding: 0.75rem;
     }
-  }
-  
-  .form-actions {
-    flex-direction: column-reverse;
-    
-    button {
-      width: 100%;
+
+    .create-user-title {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
     }
-  }
-  
-  .user-form-card {
-    padding: 0.5rem;
-    
-    mat-card-content {
-      padding: 0.5rem;
+
+    .create-user-actions {
+        margin-bottom: 0.75rem;
+
+        .back-button {
+            font-size: 0.875rem;
+            padding: 4px 8px;
+        }
     }
-  }
+
+    .form-actions {
+        flex-direction: column-reverse;
+
+        button {
+            width: 100%;
+        }
+    }
+
+    .user-form-card {
+        padding: 0.5rem;
+
+        mat-card-content {
+            padding: 0.5rem;
+        }
+    }
 }

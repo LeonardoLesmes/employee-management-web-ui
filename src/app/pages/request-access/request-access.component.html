@@ -1,108 +1,116 @@
 <div class="access-request-container">
-  <app-header></app-header>
-  
-  <div class="access-request-content">
-    <h1 class="access-request-title">Solicitud de Accesos</h1>
-    
-    <div class="access-request-actions">
-      <button 
-        mat-raised-button 
-        color="accent" 
-        class="back-button"
-        (click)="goBackToDashboard()"
-        matTooltip="Volver al Dashboard">
-        <mat-icon>arrow_back</mat-icon>
-        Volver al Dashboard
-      </button>
-    </div>
-    
-    <form [formGroup]="accessForm" (ngSubmit)="onSubmit()">
-      <mat-card class="user-search-card">
-        <mat-card-content>
-          <div class="user-search-container">
-            <mat-form-field class="user-id-field">
-              <mat-label>ID de Usuario</mat-label>
-              <input matInput formControlName="userId" placeholder="Ingrese ID de usuario" type="number">
-              <mat-error *ngIf="accessForm.get('userId')?.hasError('required')">
-                El ID de usuario es requerido
-              </mat-error>
-              <mat-error *ngIf="accessForm.get('userId')?.hasError('pattern')">
-                El ID de usuario debe ser un número
-              </mat-error>
-            </mat-form-field>
-            
-            <button 
-              mat-raised-button 
-              color="primary" 
-              type="button"
-              [disabled]="accessForm.get('userId')?.invalid || loading"
-              (click)="searchUser()">
-              <mat-icon>search</mat-icon>
-              Buscar
+    <app-header></app-header>
+
+    <div class="access-request-content">
+        <h1 class="access-request-title">Solicitud de Accesos</h1>
+
+        <div class="access-request-actions">
+            <button
+                mat-raised-button
+                color="accent"
+                class="back-button"
+                (click)="goBackToDashboard()"
+                matTooltip="Volver al Dashboard"
+            >
+                <mat-icon>arrow_back</mat-icon>
+                Volver al Dashboard
             </button>
-          </div>
-          
-          <div *ngIf="loading" class="loading-spinner">
-            <mat-spinner diameter="40"></mat-spinner>
-          </div>
-          
-          <div *ngIf="searched && !user && !loading" class="user-not-found">
-            <mat-icon color="warn">error</mat-icon>
-            <span>Usuario no encontrado</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      
-      <div *ngIf="user" class="access-request-form">
-        <mat-card class="user-info-card">
-          <mat-card-content>
-            <h2 class="user-info-title">Información del Usuario</h2>
-            <div class="user-info-details">
-              <div class="user-info-item">
-                <span class="label">ID:</span>
-                <span class="value">{{user.id}}</span>
-              </div>
-              <div class="user-info-item">
-                <span class="label">Nombre:</span>
-                <span class="value">{{user.name}}</span>
-              </div>
-              <div class="user-info-item">
-                <span class="label">Rol:</span>
-                <span class="value">{{user.role.description}}</span>
-              </div>
+        </div>
+
+        <form [formGroup]="accessForm" (ngSubmit)="onSubmit()">
+            <mat-card class="user-search-card">
+                <mat-card-content>
+                    <div class="user-search-container">
+                        <mat-form-field class="user-id-field">
+                            <mat-label>ID de Usuario</mat-label>
+                            <input
+                                matInput
+                                formControlName="userId"
+                                placeholder="Ingrese ID de usuario"
+                                type="number"
+                            />
+                            <mat-error *ngIf="accessForm.get('userId')?.hasError('required')">
+                                El ID de usuario es requerido
+                            </mat-error>
+                            <mat-error *ngIf="accessForm.get('userId')?.hasError('pattern')">
+                                El ID de usuario debe ser un número
+                            </mat-error>
+                        </mat-form-field>
+
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            type="button"
+                            [disabled]="accessForm.get('userId')?.invalid || loading"
+                            (click)="searchUser()"
+                        >
+                            <mat-icon>search</mat-icon>
+                            Buscar
+                        </button>
+                    </div>
+
+                    <div *ngIf="loading" class="loading-spinner">
+                        <mat-spinner diameter="40"></mat-spinner>
+                    </div>
+
+                    <div *ngIf="searched && !user && !loading" class="user-not-found">
+                        <mat-icon color="warn">error</mat-icon>
+                        <span>Usuario no encontrado</span>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <div *ngIf="user" class="access-request-form">
+                <mat-card class="user-info-card">
+                    <mat-card-content>
+                        <h2 class="user-info-title">Información del Usuario</h2>
+                        <div class="user-info-details">
+                            <div class="user-info-item">
+                                <span class="label">ID:</span>
+                                <span class="value">{{ user.id }}</span>
+                            </div>
+                            <div class="user-info-item">
+                                <span class="label">Nombre:</span>
+                                <span class="value">{{ user.name }}</span>
+                            </div>
+                            <div class="user-info-item">
+                                <span class="label">Rol:</span>
+                                <span class="value">{{ user.role.description }}</span>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <mat-card class="systems-card">
+                    <mat-card-content>
+                        <h2 class="systems-title">Solicitar Acceso a Sistemas</h2>
+                        <div class="systems-list" formGroupName="systemAccess">
+                            <div *ngIf="filteredSystems.length === 0" class="no-systems-message">
+                                <mat-icon color="warn">warning</mat-icon>
+                                <span>No hay sistemas disponibles para este rol</span>
+                            </div>
+                            <div *ngFor="let system of filteredSystems" class="system-item">
+                                <mat-checkbox [formControlName]="system.id.toString()">
+                                    {{ system.name }}
+                                </mat-checkbox>
+                                <span class="system-description">{{ system.description }}</span>
+                            </div>
+                        </div>
+
+                        <div class="submit-container">
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                type="submit"
+                                [disabled]="accessForm.invalid || !user || !hasSelectedSystems()"
+                            >
+                                <mat-icon>send</mat-icon>
+                                Enviar Solicitud
+                            </button>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
             </div>
-          </mat-card-content>
-        </mat-card>
-        
-        <mat-card class="systems-card">
-          <mat-card-content>
-            <h2 class="systems-title">Solicitar Acceso a Sistemas</h2>
-              <div class="systems-list" formGroupName="systemAccess">
-              <div *ngIf="filteredSystems.length === 0" class="no-systems-message">
-                <mat-icon color="warn">warning</mat-icon>
-                <span>No hay sistemas disponibles para este rol</span>
-              </div>
-              <div *ngFor="let system of filteredSystems" class="system-item">
-                <mat-checkbox [formControlName]="system.id.toString()">
-                  {{system.name}}
-                </mat-checkbox>
-                <span class="system-description">{{system.description}}</span>
-              </div>
-            </div>
-            
-            <div class="submit-container">
-              <button 
-                mat-raised-button 
-                color="primary" 
-                type="submit" 
-                [disabled]="accessForm.invalid || !user || !hasSelectedSystems()">
-                <mat-icon>send</mat-icon>
-                Enviar Solicitud
-              </button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </form>
-  </div>
+        </form>
+    </div>
 </div>

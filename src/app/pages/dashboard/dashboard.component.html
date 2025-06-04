@@ -1,68 +1,76 @@
 <div class="dashboard-container">
-  <app-header></app-header>
-  
-  <div class="dashboard-content">
-    <h1 class="dashboard-title">Gestión de Ingresos y Recursos de Equipo</h1>
-      <div class="dashboard-cards">
-      <mat-card class="feature-card">
-        <mat-card-header>
-          <div mat-card-avatar class="feature-icon user-icon">
-            <mat-icon>person_add</mat-icon>
-          </div>
-          <mat-card-title>Creación de Usuario</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>Registrar a una nueva persona en el equipo.</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="registerNewUser()">Registrar nuevo ingreso</button>
-        </mat-card-actions>
-      </mat-card>
-      
-      <mat-card class="feature-card">
-        <mat-card-header>
-          <div mat-card-avatar class="feature-icon key-icon">
-            <mat-icon>vpn_key</mat-icon>
-          </div>
-          <mat-card-title>Solicitud de Accesos</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>Solicitar permisos para un nuevo miembro del equipo.</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="requestAccess()">Solicitar acceso</button>
-        </mat-card-actions>
-      </mat-card>
-      
-      <mat-card class="feature-card">
-        <mat-card-header>
-          <div mat-card-avatar class="feature-icon computer-icon">
-            <mat-icon>computer</mat-icon>
-          </div>
-          <mat-card-title>Asignación de Computadoras</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>Asignar un equipo portátil a un nuevo ingreso.</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="assignComputer()">Asignar computador</button>
-        </mat-card-actions>
-      </mat-card>
-      
-      <mat-card class="feature-card">
-        <mat-card-header>
-          <div mat-card-avatar class="feature-icon list-icon">
-            <mat-icon>list_alt</mat-icon>
-          </div>
-          <mat-card-title>Gestión de Solicitudes</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>Visualizar y gestionar todas las solicitudes pendientes y completadas.</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="viewAllRequests()">Ver solicitudes</button>
-        </mat-card-actions>
-      </mat-card>
+    <app-header></app-header>
+
+    <div class="dashboard-content">
+        <h1 class="dashboard-title">Gestión de Ingresos y Recursos de Equipo</h1>
+        <div class="dashboard-cards">
+            <mat-card class="feature-card">
+                <mat-card-header>
+                    <div mat-card-avatar class="feature-icon user-icon">
+                        <mat-icon>person_add</mat-icon>
+                    </div>
+                    <mat-card-title>Creación de Usuario</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>Registrar a una nueva persona en el equipo.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-raised-button color="primary" (click)="registerNewUser()">
+                        Registrar nuevo ingreso
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+
+            <mat-card class="feature-card">
+                <mat-card-header>
+                    <div mat-card-avatar class="feature-icon key-icon">
+                        <mat-icon>vpn_key</mat-icon>
+                    </div>
+                    <mat-card-title>Solicitud de Accesos</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>Solicitar permisos para un nuevo miembro del equipo.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-raised-button color="primary" (click)="requestAccess()">
+                        Solicitar acceso
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+
+            <mat-card class="feature-card">
+                <mat-card-header>
+                    <div mat-card-avatar class="feature-icon computer-icon">
+                        <mat-icon>computer</mat-icon>
+                    </div>
+                    <mat-card-title>Asignación de Computadoras</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>Asignar un equipo portátil a un nuevo ingreso.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-raised-button color="primary" (click)="assignComputer()">
+                        Asignar computador
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+
+            <mat-card class="feature-card">
+                <mat-card-header>
+                    <div mat-card-avatar class="feature-icon list-icon">
+                        <mat-icon>list_alt</mat-icon>
+                    </div>
+                    <mat-card-title>Gestión de Solicitudes</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>Visualizar y gestionar todas las solicitudes pendientes y completadas.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-raised-button color="primary" (click)="viewAllRequests()">
+                        Ver solicitudes
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
     </div>
-  </div>
 </div>

@@ -4,12 +4,15 @@ import { Observable } from 'rxjs';
 import { LoginRes } from '../../models/login-res';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class LoginService {
-  private readonly http = inject(HttpClient);
-  
-  public login(email: string, password: string): Observable<LoginRes> {
-    return this.http.post<LoginRes>('http://localhost:8080/api/auth/login', { email, password });
-  }
+    private readonly http = inject(HttpClient);
+
+    public login(email: string, password: string): Observable<LoginRes> {
+        return this.http.post<LoginRes>('http://localhost:8080/api/auth/login', {
+            email,
+            password,
+        });
+    }
 }

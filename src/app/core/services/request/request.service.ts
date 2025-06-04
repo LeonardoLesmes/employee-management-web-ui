@@ -6,22 +6,22 @@ import { AccessService } from '../access/access.service';
 import { ComputerService } from '../computer/computer.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
-export class RequestService {    
+export class RequestService {
     private readonly userService = inject(UserService);
     private readonly accessService = inject(AccessService);
     private readonly computerService = inject(ComputerService);
 
-  public getRequests(assignedById: number): Observable<RequestRes> {    
-    return combineLatest([
-        this.userService.getUsersByAssignedId(assignedById),
-        this.accessService.getAccessByAssignedId(assignedById),
-        this.computerService.getComputersByAssignedId(assignedById),
-    ]).pipe(
-        map(([users, access, computers]) => { 
-          return { users, access, computers };
-        })
-    );
-  }
+    public getRequests(assignedById: number): Observable<RequestRes> {
+        return combineLatest([
+            this.userService.getUsersByAssignedId(assignedById),
+            this.accessService.getAccessByAssignedId(assignedById),
+            this.computerService.getComputersByAssignedId(assignedById),
+        ]).pipe(
+            map(([users, access, computers]) => {
+                return { users, access, computers };
+            })
+        );
+    }
 }

@@ -1,33 +1,57 @@
 <div class="auth-container">
-  <mat-card class="auth-card">
-    <div class="auth-header">
-      <h2>Iniciar sesión</h2>
-    </div>
-    
-    <mat-card-content class="auth-content">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="form-field-full">
-          <mat-label>Correo electrónico</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="usuario@ejemplo.com" required>
-          <mat-icon matPrefix>email</mat-icon>
-          <mat-error *ngIf="loginForm.get('email')?.invalid">{{ getEmailErrorMessage() }}</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="form-field-full">
-          <mat-label>Contraseña</mat-label>
-          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
-          <mat-icon matPrefix>lock</mat-icon>
-          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
-            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
-        </mat-form-field>
-
-        <div class="auth-actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
-            Ingresar
-          </button>
+    <mat-card class="auth-card">
+        <div class="auth-header">
+            <h2>Iniciar sesión</h2>
         </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+
+        <mat-card-content class="auth-content">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="outline" class="form-field-full">
+                    <mat-label>Correo electrónico</mat-label>
+                    <input
+                        matInput
+                        type="email"
+                        formControlName="email"
+                        placeholder="usuario@ejemplo.com"
+                        required
+                    />
+                    <mat-icon matPrefix>email</mat-icon>
+                    <mat-error *ngIf="loginForm.get('email')?.invalid">{{
+                        getEmailErrorMessage()
+                    }}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field-full">
+                    <mat-label>Contraseña</mat-label>
+                    <input
+                        matInput
+                        [type]="hidePassword ? 'password' : 'text'"
+                        formControlName="password"
+                        required
+                    />
+                    <mat-icon matPrefix>lock</mat-icon>
+                    <button
+                        mat-icon-button
+                        matSuffix
+                        (click)="hidePassword = !hidePassword"
+                        [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hidePassword"
+                    >
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+
+                <div class="auth-actions">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        type="submit"
+                        [disabled]="loginForm.invalid"
+                    >
+                        Ingresar
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
 </div>

@@ -1,4 +1,4 @@
-import { ReqStatus } from "./req-status";
+import { ReqStatus } from './req-status';
 
 export interface FormartedData {
     id: number;

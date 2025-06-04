@@ -7,22 +7,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { StorageService } from '../../core/services/storage/storage.service';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule
-  ],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+    selector: 'app-header',
+    standalone: true,
+    imports: [CommonModule, MatToolbarModule, MatButtonModule, MatIconModule],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
+    constructor(private readonly router: Router) {}
 
-  constructor(private readonly router: Router) {}
-
-  logout() {  
-    this.router.navigate(['/login']);
-  }
+    logout() {
+        this.router.navigate(['/login']);
+    }
 }

@@ -1,5 +1,5 @@
 export interface UserComputerReq {
-  employeeId: number;
-  computerId: number;
-  assignedById: number;
+    employeeId: number;
+    computerId: number;
+    assignedById: number;
 }

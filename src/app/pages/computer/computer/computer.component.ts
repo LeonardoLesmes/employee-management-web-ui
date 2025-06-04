@@ -1,6 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+    FormBuilder,
+    FormGroup,
+    FormsModule,
+    ReactiveFormsModule,
+    Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,157 +29,160 @@ import { FindPipe } from '../../../shared/pipes/find.pipe';
 import { ComputerDetails } from '../../../core/models/computer-details';
 
 @Component({
-  selector: 'app-computer',
-  standalone: true,  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    MatSelectModule,
-    MatSnackBarModule,
-    HeaderComponent,
-    FindPipe
-  ],
-  templateUrl: './computer.component.html',
-  styleUrl: './computer.component.scss'
+    selector: 'app-computer',
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        MatSelectModule,
+        MatSnackBarModule,
+        HeaderComponent,
+        FindPipe,
+    ],
+    templateUrl: './computer.component.html',
+    styleUrl: './computer.component.scss',
 })
 export class ComputerComponent implements OnInit {
-  assignmentForm!: FormGroup;
-  user: UserRes | null = null;
-  computers: ComputerDetails[] = [];
-  loading = false;
-  searched = false;
-  userComputer: UserComputerRes | null = null;
+    assignmentForm!: FormGroup;
+    user: UserRes | null = null;
+    computers: ComputerDetails[] = [];
+    loading = false;
+    searched = false;
+    userComputer: UserComputerRes | null = null;
 
-  private readonly fb = inject(FormBuilder);
-  private readonly userService = inject(UserService);
-  private readonly computerService = inject(ComputerService);
-  private readonly snackBar = inject(MatSnackBar);
-  private readonly router = inject(Router);
-  private readonly storage = inject(StorageService);
+    private readonly fb = inject(FormBuilder);
+    private readonly userService = inject(UserService);
+    private readonly computerService = inject(ComputerService);
+    private readonly snackBar = inject(MatSnackBar);
+    private readonly router = inject(Router);
+    private readonly storage = inject(StorageService);
 
-  ngOnInit(): void {
-    this.initForm();
-    this.loadComputers();
-  }
+    ngOnInit(): void {
+        this.initForm();
+        this.loadComputers();
+    }
 
-  private initForm(): void {
-    this.assignmentForm = this.fb.group({
-      userId: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      computerId: ['', Validators.required]
-    });
-  }
+    private initForm(): void {
+        this.assignmentForm = this.fb.group({
+            userId: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+            computerId: ['', Validators.required],
+        });
+    }
 
-  private loadComputers(): void {
-    this.loading = true;
-    this.computerService.getAvailableComputers()
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-        })
-      )
-      .subscribe({
-        next: (computers) => {
-          this.computers = computers;
-        },
-        error: (error) => {
-          console.error('Error al cargar computadoras:', error);
-          this.snackBar.open('Error al cargar las computadoras disponibles', 'Cerrar', {
-            duration: 5000
-          });
-        }
-      });
-  }
-  searchUser(): void {
-    const userId = Number(this.assignmentForm.get('userId')?.value);
-    if (!userId) return;
-    
-    this.assignmentForm.get('computerId')?.setValue('');
-    this.userComputer = null;
-    
-    this.loading = true;
-    
-    this.userService.getUserById(userId)
-      .subscribe({
-        next: (user) => {
-          this.user = user;
-          this.computerService.getComputerByUserId(userId)
+    private loadComputers(): void {
+        this.loading = true;
+        this.computerService
+            .getAvailableComputers()
             .pipe(
-              finalize(() => {
-                this.loading = false;
-                this.searched = true;
-              })
+                finalize(() => {
+                    this.loading = false;
+                })
             )
             .subscribe({
-              next: (userComputer) => {
-                this.userComputer = userComputer;
-              },
-              error: (error) => {
-                console.error('Error al buscar computadora asignada:', error);
-                this.userComputer = null;
-              }
+                next: computers => {
+                    this.computers = computers;
+                },
+                error: error => {
+                    console.error('Error al cargar computadoras:', error);
+                    this.snackBar.open('Error al cargar las computadoras disponibles', 'Cerrar', {
+                        duration: 5000,
+                    });
+                },
             });
-        },
-        error: (error) => {
-          console.error('Error al buscar usuario:', error);
-          this.user = null;
-          this.userComputer = null;
-          this.loading = false;
-          this.searched = true;
-          this.snackBar.open('Usuario no encontrado', 'Cerrar', {
-            duration: 5000
-          });
-        }
-      });
-  }
-  onSubmit(): void {
-    if (this.assignmentForm.invalid || !this.user || this.userComputer) {
-      // Si el formulario es inválido, no hay usuario seleccionado o el usuario ya tiene una computadora
-      if (this.userComputer) {
-        this.snackBar.open('El usuario ya tiene una computadora asignada', 'Cerrar', {
-          duration: 5000
-        });
-      }
-      return;
     }
-    const computerId = Number(this.assignmentForm.get('computerId')?.value);
-    const sessionUser = this.storage.getItem<SessionUser>('user');
+    searchUser(): void {
+        const userId = Number(this.assignmentForm.get('userId')?.value);
+        if (!userId) return;
 
-    this.loading = true;   const assignmentRequest: UserComputerReq = {
-      employeeId: this.user.id,
-      computerId: computerId,
-      assignedById: sessionUser?.id as number
-    };
+        this.assignmentForm.get('computerId')?.setValue('');
+        this.userComputer = null;
 
-    this.computerService.assignComputer(assignmentRequest)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-        })
-      )
-      .subscribe({
-        next: () => {
-          this.snackBar.open('Computadora asignada correctamente', 'Cerrar', {
-            duration: 3000
-          });
-          this.assignmentForm.reset();
-          this.user = null;
-          this.searched = false;
-        },
-        error: () => {
-          this.snackBar.open('Ocurrió un error al asignar la computadora', 'Cerrar', {
-            duration: 3000
-          });
+        this.loading = true;
+
+        this.userService.getUserById(userId).subscribe({
+            next: user => {
+                this.user = user;
+                this.computerService
+                    .getComputerByUserId(userId)
+                    .pipe(
+                        finalize(() => {
+                            this.loading = false;
+                            this.searched = true;
+                        })
+                    )
+                    .subscribe({
+                        next: userComputer => {
+                            this.userComputer = userComputer;
+                        },
+                        error: error => {
+                            console.error('Error al buscar computadora asignada:', error);
+                            this.userComputer = null;
+                        },
+                    });
+            },
+            error: error => {
+                console.error('Error al buscar usuario:', error);
+                this.user = null;
+                this.userComputer = null;
+                this.loading = false;
+                this.searched = true;
+                this.snackBar.open('Usuario no encontrado', 'Cerrar', {
+                    duration: 5000,
+                });
+            },
+        });
+    }
+    onSubmit(): void {
+        if (this.assignmentForm.invalid || !this.user || this.userComputer) {
+            if (this.userComputer) {
+                this.snackBar.open('El usuario ya tiene una computadora asignada', 'Cerrar', {
+                    duration: 5000,
+                });
+            }
+            return;
         }
-      });
-  }
+        const computerId = Number(this.assignmentForm.get('computerId')?.value);
+        const sessionUser = this.storage.getItem<SessionUser>('user');
 
-  goBackToDashboard(): void {
-    this.router.navigate(['/dashboard']);
-  }
+        this.loading = true;
+        const assignmentRequest: UserComputerReq = {
+            employeeId: this.user.id,
+            computerId: computerId,
+            assignedById: sessionUser?.id as number,
+        };
+
+        this.computerService
+            .assignComputer(assignmentRequest)
+            .pipe(
+                finalize(() => {
+                    this.loading = false;
+                })
+            )
+            .subscribe({
+                next: () => {
+                    this.snackBar.open('Computadora asignada correctamente', 'Cerrar', {
+                        duration: 3000,
+                    });
+                    this.assignmentForm.reset();
+                    this.user = null;
+                    this.searched = false;
+                },
+                error: () => {
+                    this.snackBar.open('Ocurrió un error al asignar la computadora', 'Cerrar', {
+                        duration: 3000,
+                    });
+                },
+            });
+    }
+
+    goBackToDashboard(): void {
+        this.router.navigate(['/dashboard']);
+    }
 }

@@ -6,21 +6,22 @@ import { System } from '../../models/system.model';
 import { AccessReq } from '../../models/access-req';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class AccessService {
+    private readonly http = inject(HttpClient);
 
-  private readonly http = inject(HttpClient);
+    public getAccessByAssignedId(assignedId: number): Observable<AccessRes[]> {
+        return this.http.get<AccessRes[]>(
+            `http://localhost:8080/api/access-requests/assigned-by/${assignedId}`
+        );
+    }
 
-  public getAccessByAssignedId(assignedId: number): Observable<AccessRes[]> {
-    return this.http.get<AccessRes[]>(`http://localhost:8080/api/access-requests/assigned-by/${assignedId}`);
-  }
-  
-  public getSystems(): Observable<System[]> {
-    return this.http.get<System[]>('http://localhost:8080/api/systems');
-  }
+    public getSystems(): Observable<System[]> {
+        return this.http.get<System[]>('http://localhost:8080/api/systems');
+    }
 
-  public createAccessRequest(access: AccessReq): Observable<void> {
-    return this.http.post<void>('http://localhost:8080/api/access-requests', access);
-  }
+    public createAccessRequest(access: AccessReq): Observable<void> {
+        return this.http.post<void>('http://localhost:8080/api/access-requests', access);
+    }
 }

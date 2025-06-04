@@ -1,5 +1,5 @@
 export interface AccessReq {
-    employeeId: number,
-    systemIds: number[],
-    assignedById: number
+    employeeId: number;
+    systemIds: number[];
+    assignedById: number;
 }

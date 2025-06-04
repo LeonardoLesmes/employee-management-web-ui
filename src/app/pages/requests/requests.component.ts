@@ -20,122 +20,134 @@ import { SessionUser } from '../../core/models/user.model';
 import { ReqStatus } from './models/req-status';
 
 @Component({
-  selector: 'app-requests',
-  standalone: true,  imports: [
-    CommonModule,
-    FormsModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDialogModule,
-    MatCardModule,
-    MatTooltipModule,
-    MatSnackBarModule,
-    MatInputModule,
-    MatFormFieldModule,
-    HeaderComponent
-  ],
-  providers: [RequestService],
-  templateUrl: './requests.component.html',
-  styleUrl: './requests.component.scss'
+    selector: 'app-requests',
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatTableModule,
+        MatButtonModule,
+        MatIconModule,
+        MatDialogModule,
+        MatCardModule,
+        MatTooltipModule,
+        MatSnackBarModule,
+        MatInputModule,
+        MatFormFieldModule,
+        HeaderComponent,
+    ],
+    providers: [RequestService],
+    templateUrl: './requests.component.html',
+    styleUrl: './requests.component.scss',
 })
 export class RequestsComponent implements OnInit {
-  public dataSource = computed(() => this.formatData());
+    public dataSource = computed(() => this.formatData());
 
-  private readonly requests = signal<RequestRes>({ users: [], access: [], computers: [] });
-
-  private readonly storage = inject(StorageService);
-  constructor(
-    private readonly router: Router,
-    private readonly requestService: RequestService,
-    private readonly snackBar: MatSnackBar
-  ) {}
-
-  ngOnInit(): void {
-    this.loadRequests();
-  }
-
-  private loadRequests(): void {
-    const user = this.storage.getItem<SessionUser>('user');
-    if (user) {
-      this.requestService.getRequests(user.id).subscribe(data => {
-        this.requests.set(data);
-      });
-    }
-  }
-
-  private formatData(): FormartedData[] {
-    const users = this.requests().users.map((user): FormartedData => ({
-      id: user.id,
-      user: user.name,
-      userId: user.id,
-      request: 'Creación de usuario',
-      date: new Date(user.createdAt),
-      status: this.formatStatus(user.status),
-      type: 'user'
-    }));
-    
-    const access = this.requests().access.map((access): FormartedData => ({
-      id: access.id,
-      user: access.employeeName,
-      userId: access.employeeId,
-      request: `Acceso a ${access.systemName}`,
-      date: new Date(access.requestDate),
-      status: this.formatStatus(access.status),
-      type: 'access'
-    }));
-
-    const computers = this.requests().computers.map((computer): FormartedData => ({
-      id: computer.id,
-      user: computer.employeeName,
-      userId: computer.employeeId,
-      request: 'Asignación de computador',
-      date: new Date(computer.requestDate),
-      status: this.formatStatus(computer.status),
-      type: 'computer'
-    }));
-    
-    return [ ...users, ...access, ...computers].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }
-
-  private formatStatus(status: string): ReqStatus{
-    switch (status) {
-      case 'PENDING':
-        return 'Pendiente';
-      case 'APPROVED':
-        return 'Aprobada';
-      case 'REJECTED':
-        return 'Rechazada';
-      case 'CANCELED':
-        return 'Cancelada';
-      default:
-        return 'Desconocido';
-    }
-  }
-
-  refreshRequests(): void {
-    this.loadRequests();
-    this.snackBar.open('Solicitudes actualizadas', 'Cerrar', {
-      duration: 2000
+    private readonly requests = signal<RequestRes>({
+        users: [],
+        access: [],
+        computers: [],
     });
-  }
 
+    private readonly storage = inject(StorageService);
+    constructor(
+        private readonly router: Router,
+        private readonly requestService: RequestService,
+        private readonly snackBar: MatSnackBar
+    ) {}
 
-  getStatusClass(status: string): string {
-    switch (status.toLowerCase()) {
-      case 'pendiente':
-        return 'status-pending';
-      case 'aprobada':
-        return 'status-approved';
-      case 'rechazada':
-      case 'cancelada':
-        return 'status-rejected';
-      default:
-        return 'status-unknown';
+    ngOnInit(): void {
+        this.loadRequests();
     }
-  }
 
-  goBackToDashboard(): void {
-    this.router.navigate(['/dashboard']);
-  }
+    private loadRequests(): void {
+        const user = this.storage.getItem<SessionUser>('user');
+        if (user) {
+            this.requestService.getRequests(user.id).subscribe(data => {
+                this.requests.set(data);
+            });
+        }
+    }
+
+    private formatData(): FormartedData[] {
+        const users = this.requests().users.map(
+            (user): FormartedData => ({
+                id: user.id,
+                user: user.name,
+                userId: user.id,
+                request: 'Creación de usuario',
+                date: new Date(user.createdAt),
+                status: this.formatStatus(user.status),
+                type: 'user',
+            })
+        );
+
+        const access = this.requests().access.map(
+            (access): FormartedData => ({
+                id: access.id,
+                user: access.employeeName,
+                userId: access.employeeId,
+                request: `Acceso a ${access.systemName}`,
+                date: new Date(access.requestDate),
+                status: this.formatStatus(access.status),
+                type: 'access',
+            })
+        );
+
+        const computers = this.requests().computers.map(
+            (computer): FormartedData => ({
+                id: computer.id,
+                user: computer.employeeName,
+                userId: computer.employeeId,
+                request: 'Asignación de computador',
+                date: new Date(computer.requestDate),
+                status: this.formatStatus(computer.status),
+                type: 'computer',
+            })
+        );
+
+        return [...users, ...access, ...computers].sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+    }
+
+    private formatStatus(status: string): ReqStatus {
+        switch (status) {
+            case 'PENDING':
+                return 'Pendiente';
+            case 'APPROVED':
+                return 'Aprobada';
+            case 'REJECTED':
+                return 'Rechazada';
+            case 'CANCELED':
+                return 'Cancelada';
+            default:
+                return 'Desconocido';
+        }
+    }
+
+    refreshRequests(): void {
+        this.loadRequests();
+        this.snackBar.open('Solicitudes actualizadas', 'Cerrar', {
+            duration: 2000,
+        });
+    }
+
+    getStatusClass(status: string): string {
+        switch (status.toLowerCase()) {
+            case 'pendiente':
+                return 'status-pending';
+            case 'aprobada':
+                return 'status-approved';
+            case 'rechazada':
+            case 'cancelada':
+                return 'status-rejected';
+            default:
+                return 'status-unknown';
+        }
+    }
+
+    goBackToDashboard(): void {
+        this.router.navigate(['/dashboard']);
+    }
 }
