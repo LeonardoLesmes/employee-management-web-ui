@@ -41,7 +41,7 @@
                             mat-raised-button
                             color="primary"
                             type="button"
-                            [disabled]="accessForm.get('userId')?.invalid || loading"
+                            [disabled]="accessForm.get('userId')?.invalid || loading()"
                             (click)="searchUser()"
                         >
                             <mat-icon>search</mat-icon>
@@ -49,33 +49,33 @@
                         </button>
                     </div>
 
-                    <div *ngIf="loading" class="loading-spinner">
+                    <div *ngIf="loading()" class="loading-spinner">
                         <mat-spinner diameter="40"></mat-spinner>
                     </div>
 
-                    <div *ngIf="searched && !user && !loading" class="user-not-found">
+                    <div *ngIf="searched() && !user() && !loading()" class="user-not-found">
                         <mat-icon color="warn">error</mat-icon>
                         <span>Usuario no encontrado</span>
                     </div>
                 </mat-card-content>
             </mat-card>
 
-            <div *ngIf="user" class="access-request-form">
+            <div *ngIf="user()" class="access-request-form">
                 <mat-card class="user-info-card">
                     <mat-card-content>
                         <h2 class="user-info-title">Información del Usuario</h2>
                         <div class="user-info-details">
                             <div class="user-info-item">
                                 <span class="label">ID:</span>
-                                <span class="value">{{ user.id }}</span>
+                                <span class="value">{{ user()?.id }}</span>
                             </div>
                             <div class="user-info-item">
                                 <span class="label">Nombre:</span>
-                                <span class="value">{{ user.name }}</span>
+                                <span class="value">{{ user()?.name }}</span>
                             </div>
                             <div class="user-info-item">
                                 <span class="label">Rol:</span>
-                                <span class="value">{{ user.role.description }}</span>
+                                <span class="value">{{ user()?.role?.description }}</span>
                             </div>
                         </div>
                     </mat-card-content>
@@ -85,11 +85,11 @@
                     <mat-card-content>
                         <h2 class="systems-title">Solicitar Acceso a Sistemas</h2>
                         <div class="systems-list" formGroupName="systemAccess">
-                            <div *ngIf="filteredSystems.length === 0" class="no-systems-message">
+                            <div *ngIf="filteredSystems().length === 0" class="no-systems-message">
                                 <mat-icon color="warn">warning</mat-icon>
                                 <span>No hay sistemas disponibles para este rol</span>
                             </div>
-                            <div *ngFor="let system of filteredSystems" class="system-item">
+                            <div *ngFor="let system of filteredSystems()" class="system-item">
                                 <mat-checkbox [formControlName]="system.id.toString()">
                                     {{ system.name }}
                                 </mat-checkbox>
@@ -102,7 +102,7 @@
                                 mat-raised-button
                                 color="primary"
                                 type="submit"
-                                [disabled]="accessForm.invalid || !user || !hasSelectedSystems()"
+                                [disabled]="accessForm.invalid || !user() || !hasSelectedSystems()"
                             >
                                 <mat-icon>send</mat-icon>
                                 Enviar Solicitud
