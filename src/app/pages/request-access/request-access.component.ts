@@ -49,10 +49,6 @@ export class RequestAccessComponent implements OnInit {
     public readonly loading = signal<boolean>(false);
     public readonly searched = signal<boolean>(false);
 
-    public readonly hasSelectedSystems = computed(() => {
-        return this.getSelectedSystems().length > 0;
-    });
-
     private readonly fb = inject(FormBuilder);
     private readonly userService = inject(UserService);
     private readonly accessService = inject(AccessService);
@@ -162,7 +158,7 @@ export class RequestAccessComponent implements OnInit {
     }
 
     public onSubmit(): void {
-        if (this.accessForm.invalid || !this.user() || !this.hasSelectedSystems()) {
+        if (this.accessForm.invalid || !this.user() ||  !(this.getSelectedSystems().length > 0)) {
             return;
         }
 

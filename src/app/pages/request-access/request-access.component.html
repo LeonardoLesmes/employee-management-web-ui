@@ -102,7 +102,7 @@
                                 mat-raised-button
                                 color="primary"
                                 type="submit"
-                                [disabled]="accessForm.invalid || !user() || !hasSelectedSystems()"
+                                [disabled]="accessForm.invalid || !user() || !(this.getSelectedSystems().length > 0)"
                             >
                                 <mat-icon>send</mat-icon>
                                 Enviar Solicitud

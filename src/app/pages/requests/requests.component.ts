@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { RequestService } from '../../core/services/request/request.service';
 import { RequestRes } from '../../core/models/request-res';
@@ -34,6 +35,7 @@ import { ReqStatus } from './models/req-status';
         MatSnackBarModule,
         MatInputModule,
         MatFormFieldModule,
+        MatProgressSpinnerModule,
         HeaderComponent,
     ],
     providers: [RequestService],
@@ -41,7 +43,8 @@ import { ReqStatus } from './models/req-status';
     styleUrl: './requests.component.scss',
 })
 export class RequestsComponent implements OnInit {
-    public dataSource = computed(() => this.formatData());
+    public readonly dataSource = computed(() => this.formatData());
+    public readonly loading = signal<boolean>(false);
 
     private readonly requests = signal<RequestRes>({
         users: [],
@@ -50,11 +53,9 @@ export class RequestsComponent implements OnInit {
     });
 
     private readonly storage = inject(StorageService);
-    constructor(
-        private readonly router: Router,
-        private readonly requestService: RequestService,
-        private readonly snackBar: MatSnackBar
-    ) {}
+    private readonly router = inject(Router);
+    private readonly requestService = inject(RequestService);
+    private readonly snackBar = inject(MatSnackBar);
 
     ngOnInit(): void {
         this.loadRequests();
@@ -63,8 +64,19 @@ export class RequestsComponent implements OnInit {
     private loadRequests(): void {
         const user = this.storage.getItem<SessionUser>('user');
         if (user) {
-            this.requestService.getRequests(user.id).subscribe(data => {
-                this.requests.set(data);
+            this.loading.set(true);
+            this.requestService.getRequests(user.id).subscribe({
+                next: data => {
+                    this.requests.set(data);
+                    this.loading.set(false);
+                },
+                error: error => {
+                    console.error('Error al cargar solicitudes:', error);
+                    this.loading.set(false);
+                    this.snackBar.open('Error al cargar las solicitudes', 'Cerrar', {
+                        duration: 5000,
+                    });
+                }
             });
         }
     }
@@ -124,14 +136,14 @@ export class RequestsComponent implements OnInit {
         }
     }
 
-    refreshRequests(): void {
+    public refreshRequests(): void {
         this.loadRequests();
         this.snackBar.open('Solicitudes actualizadas', 'Cerrar', {
             duration: 2000,
         });
     }
 
-    getStatusClass(status: string): string {
+    public getStatusClass(status: string): string {
         switch (status.toLowerCase()) {
             case 'pendiente':
                 return 'status-pending';
@@ -145,7 +157,7 @@ export class RequestsComponent implements OnInit {
         }
     }
 
-    goBackToDashboard(): void {
+    public goBackToDashboard(): void {
         this.router.navigate(['/dashboard']);
     }
 }

@@ -18,6 +18,7 @@
                 mat-raised-button
                 color="primary"
                 class="refresh-button"
+                [disabled]="loading()"
                 (click)="refreshRequests()"
                 matTooltip="Actualizar solicitudes"
             >
@@ -27,7 +28,12 @@
         </div>
         <mat-card class="requests-table-card">
             <mat-card-content>
-                <div class="table-container desktop-table">
+                <div *ngIf="loading()" class="loading-container">
+                    <mat-spinner diameter="50"></mat-spinner>
+                    <p>Cargando solicitudes...</p>
+                </div>
+
+                <div *ngIf="!loading()" class="table-container desktop-table">
                     <table
                         mat-table
                         [dataSource]="dataSource()"
@@ -80,7 +86,7 @@
                     </table>
                 </div>
 
-                <div class="mobile-cards">
+                <div *ngIf="!loading()" class="mobile-cards">
                     <div class="request-card" *ngFor="let request of dataSource()">
                         <div class="request-header">
                             <span class="request-title">{{ request.request }}</span>
