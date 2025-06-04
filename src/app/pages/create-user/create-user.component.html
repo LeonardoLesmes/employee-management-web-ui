@@ -1,8 +1,18 @@
 <div class="create-user-container">
   <app-header></app-header>
-  
-  <div class="create-user-content">
+    <div class="create-user-content">
     <h1 class="create-user-title">Crear Nuevo Usuario</h1>
+    
+    <div class="create-user-actions">
+      <button 
+        mat-raised-button 
+        color="accent" 
+        class="back-button"
+        (click)="goBackToDashboard()">
+        <mat-icon>arrow_back</mat-icon>
+        Volver al Dashboard
+      </button>
+    </div>
     
     <mat-card class="user-form-card">
       <mat-card-content>

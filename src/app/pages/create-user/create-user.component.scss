@@ -29,6 +29,25 @@
   max-width: 100%;
 }
 
+.create-user-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1.5rem;
+  
+  .back-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
+    }
+  }
+}
+
 .user-form-card {
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -92,6 +111,10 @@
     margin-bottom: 1.5rem;
   }
   
+  .create-user-actions {
+    margin-bottom: 1rem;
+  }
+  
   .user-form-card mat-card-content {
     padding: 0.75rem;
   }
@@ -109,6 +132,15 @@
   .create-user-title {
     font-size: 1.25rem;
     margin-bottom: 1rem;
+  }
+  
+  .create-user-actions {
+    margin-bottom: 0.75rem;
+    
+    .back-button {
+      font-size: 0.875rem;
+      padding: 4px 8px;
+    }
   }
   
   .form-actions {

@@ -97,7 +97,6 @@ export class CreateUserComponent implements OnInit {
       });
     }    
   }
-
   hasError(controlName: string, errorName: string): boolean {
     const control = this.userForm.get(controlName);
     return !!(control && control.touched && control.hasError(errorName));
@@ -105,5 +104,9 @@ export class CreateUserComponent implements OnInit {
   
   get isSubmitDisabled(): boolean {
     return this.userForm.invalid;
+  }
+  
+  goBackToDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 }
