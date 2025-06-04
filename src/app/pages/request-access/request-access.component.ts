@@ -17,7 +17,7 @@ import { HeaderComponent } from '../../shared/components/header/header.component
 import { UserRes } from '../../core/models/user/user-res';
 import { ROLE_PERMISSION_MAP } from '../../core/models/role-permission-map';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { SessionUser } from '../../core/models/user/session.model';
+import { SessionUser } from '../../core/models/manager/session.model';
 import { AccessReq } from '../../core/models/access/access-req';
 import { finalize } from 'rxjs';
 
@@ -126,7 +126,6 @@ export class RequestAccessComponent implements OnInit {
             this.filteredSystems = this.systems.filter(system => roleMapping.allowedSystemIds.includes(system.id));
         } else {
             this.filteredSystems = [];
-            console.warn(`No permission mapping found for role ID: ${this.user?.role.id}`);
             this.snackBar.open('No hay permisos definidos para este rol de usuario', 'Cerrar', {
                 duration: 5000,
             });

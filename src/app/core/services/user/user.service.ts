@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Role } from '../../models/role.model';
+import { Role } from '../../models/user/role.model';
 import { UserReq } from '../../models/user/user-req';
 import { UserRes } from '../../models/user/user-res';
 import { environment } from '../../../../environments/environment.prod';

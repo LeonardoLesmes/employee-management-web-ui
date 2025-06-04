@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { LoginService } from '../../core/services/login/login.service';
-import { SessionUser } from '../../core/models/user/session.model';
+import { SessionUser } from '../../core/models/manager/session.model';
 import { StorageService } from '../../core/services/storage/storage.service';
 
 @Component({

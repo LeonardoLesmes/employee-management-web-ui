@@ -17,7 +17,7 @@ import { UserComputerRes } from '../../core/models/computer/user-computer-res.mo
 import { UserRes } from '../../core/models/user/user-res';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { SessionUser } from '../../core/models/user/session.model';
+import { SessionUser } from '../../core/models/manager/session.model';
 import { UserComputerReq } from '../../core/models/computer/user-computer-req.model';
 import { FindPipe } from '../../shared/pipes/find.pipe';
 import { ComputerDetails } from '../../core/models/computer/computer-details';

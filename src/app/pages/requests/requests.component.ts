@@ -16,7 +16,7 @@ import { RequestService } from '../../core/services/request/request.service';
 import { RequestRes } from '../../core/models/request-res';
 import { FormartedData } from './models/formated-data';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { SessionUser } from '../../core/models/user/session.model';
+import { SessionUser } from '../../core/models/manager/session.model';
 import { ReqStatus } from './models/req-status';
 
 @Component({
@@ -76,7 +76,7 @@ export class RequestsComponent implements OnInit {
                 user: user.name,
                 userId: user.id,
                 request: 'Creación de usuario',
-                date: new Date(user.createdAt),
+                date: new Date(user.requestDate),
                 status: this.formatStatus(user.status),
                 type: 'user',
             })

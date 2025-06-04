@@ -10,10 +10,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../shared/components/header/header.component';
-import { Role } from '../../core/models/role.model';
+import { Role } from '../../core/models/user/role.model';
 import { UserService } from '../../core/services/user/user.service';
 import { StorageService } from '../../core/services/storage/storage.service';
-import { SessionUser } from '../../core/models/user/session.model';
+import { SessionUser } from '../../core/models/manager/session.model';
 import { UserReq } from '../../core/models/user/user-req';
 
 @Component({

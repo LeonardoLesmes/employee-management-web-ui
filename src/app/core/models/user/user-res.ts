@@ -5,7 +5,7 @@ export interface UserRes {
     department: string;
     role: Role;
     status: 'APPROVED' | 'PENDING' | 'REJECTED' | 'CANCELED';
-    createdAt: string;
+    requestDate: string;
 }
 
 export interface Role {
