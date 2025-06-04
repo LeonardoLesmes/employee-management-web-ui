@@ -1,21 +1,41 @@
 import { Injectable } from '@angular/core';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StorageService {
+    private readonly secretKey = 'emp-mgmt-secret-key-2025';
+    private readonly keySecret = 'emp-mgmt-key-salt-2025';
+
+    private encrypt(data: string): string {
+        return CryptoJS.AES.encrypt(data, this.secretKey).toString();
+    }
+
+    private decrypt(encryptedData: string): string {
+        const bytes = CryptoJS.AES.decrypt(encryptedData, this.secretKey);
+        return bytes.toString(CryptoJS.enc.Utf8);
+    }
+
+    private encryptKey(key: string): string {
+        return CryptoJS.HmacSHA256(key, this.keySecret).toString();
+    }
+
     public setItem(key: string, value: unknown): void {
         try {
+            let dataToStore: string;
+
             if (typeof value === 'string') {
-                sessionStorage.setItem(key, value);
-                return;
+                dataToStore = value;
+            } else if (value === undefined || value === null) {
+                dataToStore = 'null';
+            } else {
+                dataToStore = JSON.stringify(value);
             }
-            if (value === undefined || value === null) {
-                sessionStorage.setItem(key, 'null');
-                return;
-            }
-            const serializedValue = JSON.stringify(value);
-            sessionStorage.setItem(key, serializedValue);
+
+            const encryptedKey = this.encryptKey(key);
+            const encryptedData = this.encrypt(dataToStore);
+            sessionStorage.setItem(encryptedKey, encryptedData);
         } catch (error) {
             console.error(`Error setting item in sessionStorage: ${error}`);
         }
@@ -23,20 +43,27 @@ export class StorageService {
 
     public getItem<T>(key: string, parseJson: boolean = true): T | null {
         try {
-            const serializedValue = sessionStorage.getItem(key);
+            const encryptedKey = this.encryptKey(key);
+            const encryptedValue = sessionStorage.getItem(encryptedKey);
 
-            if (serializedValue === null) {
+            if (encryptedValue === null) {
+                return null;
+            }
+
+            const decryptedValue = this.decrypt(encryptedValue);
+
+            if (!decryptedValue) {
                 return null;
             }
 
             if (!parseJson) {
-                return this.removeQuotesIfPresent(serializedValue) as unknown as T;
+                return this.removeQuotesIfPresent(decryptedValue) as unknown as T;
             }
 
             try {
-                return JSON.parse(serializedValue);
+                return JSON.parse(decryptedValue);
             } catch {
-                return this.removeQuotesIfPresent(serializedValue) as unknown as T;
+                return this.removeQuotesIfPresent(decryptedValue) as unknown as T;
             }
         } catch (error) {
             console.error(`Error getting item from sessionStorage: ${error}`);
@@ -56,13 +83,15 @@ export class StorageService {
 
     public removeItem(key: string): void {
         try {
-            sessionStorage.removeItem(key);
+            const encryptedKey = this.encryptKey(key);
+            sessionStorage.removeItem(encryptedKey);
         } catch (error) {
             console.error(`Error removing item from sessionStorage: ${error}`);
         }
     }
 
     public hasItem(key: string): boolean {
-        return sessionStorage.getItem(key) !== null;
+        const encryptedKey = this.encryptKey(key);
+        return sessionStorage.getItem(encryptedKey) !== null;
     }
 }
