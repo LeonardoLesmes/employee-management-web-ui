@@ -15,6 +15,7 @@ export const environment = {
             base: '/access-requests',
             assignedBy: '/access-requests/assigned-by',
             systems: '/systems',
+            availableSystems: '/systems/available',
         },
         computer: {
             base: '/computer-assignments',

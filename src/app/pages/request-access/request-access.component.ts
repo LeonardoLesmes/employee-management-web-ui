@@ -15,7 +15,6 @@ import { AccessService } from '../../core/services/access/access.service';
 import { System } from '../../core/models/access/system.model';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { UserRes } from '../../core/models/user/user-res';
-import { ROLE_PERMISSION_MAP } from '../../core/models/role-permission-map';
 import { StorageService } from '../../core/services/storage/storage.service';
 import { SessionUser } from '../../core/models/manager/session.model';
 import { AccessReq } from '../../core/models/access/access-req';
@@ -67,6 +66,7 @@ export class RequestAccessComponent implements OnInit {
             systemAccess: this.fb.group({}),
         });
     }
+
     private loadSystems(): void {
         this.loading = true;
         this.accessService.getSystems().subscribe({
@@ -88,6 +88,7 @@ export class RequestAccessComponent implements OnInit {
             },
         });
     }
+
     searchUser(): void {
         const userId = Number(this.accessForm.get('userId')?.value);
         if (!userId) return;
@@ -96,9 +97,7 @@ export class RequestAccessComponent implements OnInit {
         this.userService.getUserById(userId).subscribe({
             next: user => {
                 this.user = user;
-                this.loading = false;
-                this.searched = true;
-                this.filterSystemsByUserRole();
+                this.getAvailableSystemsForRole(user.role.id);
             },
             error: error => {
                 console.error('Error al buscar usuario:', error);
@@ -112,24 +111,32 @@ export class RequestAccessComponent implements OnInit {
         });
     }
 
-    private filterSystemsByUserRole(): void {
-        if (!this.user || !this.systems.length) return;
+    private getAvailableSystemsForRole(roleId: number): void {
+        this.accessService.getAvailableSystems(roleId).subscribe({
+            next: (allowedSystems) => {
+                this.loading = false;
+                this.searched = true;
+                this.filterSystemsByUserRole(allowedSystems);
+            },
+            error: () => {
+                this.loading = false;
+                this.searched = true;
+                this.snackBar.open('No hay permisos definidos para este rol de usuario', 'Cerrar', { duration: 5000 });
+            },
+        });
+    }
+
+    private filterSystemsByUserRole(allowedSystems: number[]): void {
+        if (!this.user || !this.systems.length) {
+            return;
+        }
 
         const systemAccessGroup = this.accessForm.get('systemAccess') as FormGroup;
         Object.keys(systemAccessGroup.controls).forEach(controlName => {
             systemAccessGroup.get(controlName)?.setValue(false);
         });
 
-        const roleMapping = ROLE_PERMISSION_MAP.find(mapping => mapping.roleId === this.user?.role.id);
-
-        if (roleMapping) {
-            this.filteredSystems = this.systems.filter(system => roleMapping.allowedSystemIds.includes(system.id));
-        } else {
-            this.filteredSystems = [];
-            this.snackBar.open('No hay permisos definidos para este rol de usuario', 'Cerrar', {
-                duration: 5000,
-            });
-        }
+        this.filteredSystems = this.systems.filter(system => allowedSystems.includes(system.id));
     }
     getSelectedSystems(): System[] {
         const selectedSystems: System[] = [];

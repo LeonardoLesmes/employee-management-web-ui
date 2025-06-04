@@ -23,4 +23,8 @@ export class AccessService {
     public createAccessRequest(access: AccessReq): Observable<void> {
         return this.http.post<void>(environment.resources.access.base, access);
     }
+
+    public getAvailableSystems(roleId: number): Observable<number[]> {
+        return this.http.get<number[]>(`${environment.resources.access.availableSystems}/${roleId}`);
+    }
 }
