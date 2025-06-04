@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,9 +19,10 @@ import { StorageService } from '../../core/services/storage/storage.service';
     styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-    public loginForm: FormGroup;
-    public hidePassword = true;
-    private readonly LoginService = inject(LoginService);
+    public readonly loginForm: FormGroup;
+    public readonly hidePassword = signal<boolean>(true);
+
+    private readonly loginService = inject(LoginService);
     private readonly router = inject(Router);
     private readonly fb = inject(FormBuilder);
     private readonly snackBar = inject(MatSnackBar);
@@ -34,9 +35,9 @@ export class LoginComponent {
         });
     }
 
-    onSubmit(): void {
+    public onSubmit(): void {
         if (this.loginForm.valid) {
-            this.LoginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
+            this.loginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
                 next: res => {
                     const user: SessionUser = {
                         id: res.id,
@@ -79,5 +80,9 @@ export class LoginComponent {
         }
 
         return passwordControl.hasError('minlength') ? 'La contraseña debe tener al menos 6 caracteres' : '';
+    }
+
+    public togglePasswordVisibility(): void {
+        this.hidePassword.set(!this.hidePassword());
     }
 }
