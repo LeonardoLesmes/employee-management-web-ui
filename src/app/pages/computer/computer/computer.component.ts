@@ -13,14 +13,14 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { UserService } from '../../../core/services/user/user.service';
 import { ComputerService } from '../../../core/services/computer/computer.service';
-import { ComputerRes } from '../../../core/models/computer-res.model';
+import { UserComputerRes } from '../../../core/models/user-computer-res.model';
 import { UserRes } from '../../../core/models/user-res';
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { StorageService } from '../../../core/services/storage/storage.service';
 import { SessionUser } from '../../../core/models/user.model';
-import { ComputerReq } from '../../../core/models/computer-assignment-req.model';
+import { UserComputerReq } from '../../../core/models/user-computer-req.model';
 import { FindPipe } from '../../../shared/pipes/find.pipe';
-import { UserComputerRes } from '../../../core/models/user-computer.model';
+import { ComputerDetails } from '../../../core/models/computer-details';
 
 @Component({
   selector: 'app-computer',
@@ -45,7 +45,7 @@ import { UserComputerRes } from '../../../core/models/user-computer.model';
 export class ComputerComponent implements OnInit {
   assignmentForm!: FormGroup;
   user: UserRes | null = null;
-  computers: ComputerRes[] = [];
+  computers: ComputerDetails[] = [];
   loading = false;
   searched = false;
   userComputer: UserComputerRes | null = null;
@@ -144,7 +144,7 @@ export class ComputerComponent implements OnInit {
     const computerId = Number(this.assignmentForm.get('computerId')?.value);
     const sessionUser = this.storage.getItem<SessionUser>('user');
 
-    this.loading = true;   const assignmentRequest: ComputerReq = {
+    this.loading = true;   const assignmentRequest: UserComputerReq = {
       employeeId: this.user.id,
       computerId: computerId,
       assignedById: sessionUser?.id as number

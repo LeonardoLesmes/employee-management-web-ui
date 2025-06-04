@@ -1,6 +1,6 @@
 import { StatusType } from "../types/status.types";
 
-export interface ComputerRes {
+export interface UserComputerRes {
   id: number;
   employeeId: number;
   employeeName: string;

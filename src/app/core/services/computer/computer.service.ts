@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ComputerRes } from '../../models/computer-res.model';
-import { ComputerReq } from '../../models/computer-assignment-req.model';
-import { UserComputerRes } from '../../models/user-computer.model';
+import { UserComputerRes } from '../../models/user-computer-res.model';
+import { UserComputerReq } from '../../models/user-computer-req.model';
+import { ComputerDetails } from '../../models/computer-details';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +11,15 @@ import { UserComputerRes } from '../../models/user-computer.model';
 export class ComputerService {
   private readonly http = inject(HttpClient);
 
-  public getComputersByAssignedId(assignedId: number): Observable<ComputerRes[]> {
-    return this.http.get<ComputerRes[]>(`http://localhost:8080/api/computer-assignments/assigned-by/${assignedId}`);
+  public getComputersByAssignedId(assignedId: number): Observable<UserComputerRes[]> {
+    return this.http.get<UserComputerRes[]>(`http://localhost:8080/api/computer-assignments/assigned-by/${assignedId}`);
   }
 
-  public getAvailableComputers(): Observable<ComputerRes[]> {
-    return this.http.get<ComputerRes[]>('http://localhost:8080/api/computer-assignments/available');
+  public getAvailableComputers(): Observable<ComputerDetails[]> {
+    return this.http.get<ComputerDetails[]>('http://localhost:8080/api/computer-assignments/available');
   }
   
-  public assignComputer(request: ComputerReq): Observable<void> {
+  public assignComputer(request: UserComputerReq): Observable<void> {
     return this.http.post<void>('http://localhost:8080/api/computer-assignments', request);
   }
 
