@@ -19,6 +19,8 @@
 
 html,
 body {
+    height: 100%;
+    margin: 0;
     @include mat.theme(
         (
             color: (
@@ -35,8 +37,6 @@ body {
             density: 0,
         )
     );
-    height: 100%;
-    margin: 0;
 }
 
 body {
