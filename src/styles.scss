@@ -22,13 +22,12 @@ body {
     @include mat.theme(
         (
             color: (
-                primary: mat.$violet-palette,
-                tertiary: mat.$orange-palette,
+                primary: mat.$azure-palette,
                 theme-type: light,
             ),
             typography: (
                 plain-family: Roboto,
-                brand-family: Open Sans,
+                brand-family: Roboto,
                 bold-weight: 900,
                 medium-weight: 500,
                 regular-weight: 300,
