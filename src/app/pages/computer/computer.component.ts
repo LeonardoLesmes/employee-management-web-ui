@@ -17,16 +17,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
-import { UserService } from '../../../core/services/user/user.service';
-import { ComputerService } from '../../../core/services/computer/computer.service';
-import { UserComputerRes } from '../../../core/models/user-computer-res.model';
-import { UserRes } from '../../../core/models/user-res';
-import { HeaderComponent } from '../../../shared/header/header.component';
-import { StorageService } from '../../../core/services/storage/storage.service';
-import { SessionUser } from '../../../core/models/user.model';
-import { UserComputerReq } from '../../../core/models/user-computer-req.model';
-import { FindPipe } from '../../../shared/pipes/find.pipe';
-import { ComputerDetails } from '../../../core/models/computer-details';
+import { UserService } from '../../core/services/user/user.service';
+import { ComputerService } from '../../core/services/computer/computer.service';
+import { UserComputerRes } from '../../core/models/user-computer-res.model';
+import { UserRes } from '../../core/models/user-res';
+import { HeaderComponent } from '../../shared/header/header.component';
+import { StorageService } from '../../core/services/storage/storage.service';
+import { SessionUser } from '../../core/models/user.model';
+import { UserComputerReq } from '../../core/models/user-computer-req.model';
+import { FindPipe } from '../../shared/pipes/find.pipe';
+import { ComputerDetails } from '../../core/models/computer-details';
 
 @Component({
     selector: 'app-computer',

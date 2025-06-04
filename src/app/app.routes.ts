@@ -36,7 +36,7 @@ export const routes: Routes = [
         path: 'assign-computer',
         canActivate: [tokenGuard],
         loadComponent: () =>
-            import('./pages/computer/computer/computer.component').then(m => m.ComputerComponent),
+            import('./pages/computer/computer.component').then(m => m.ComputerComponent),
     },
 
     { path: '', redirectTo: '/login', pathMatch: 'full' },

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { StorageService } from './core/services/storage/storage.service';
-import { filter, map } from 'rxjs';
+import { filter } from 'rxjs';
 
 @Component({
     selector: 'app-root',
