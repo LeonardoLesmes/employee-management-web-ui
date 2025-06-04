@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ import { StorageService } from '../../core/services/storage/storage.service';
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
     public loginForm: FormGroup;
     public hidePassword = true;
     private readonly LoginService = inject(LoginService);
@@ -32,11 +32,6 @@ export class LoginComponent implements OnInit {
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(6)]],
         });
-    }
-
-    ngOnInit(): void {
-        this.loginForm.get('email')?.patchValue('leonardo_lesmes@outlook.com');
-        this.loginForm.get('password')?.patchValue('123456789');
     }
 
     onSubmit(): void {

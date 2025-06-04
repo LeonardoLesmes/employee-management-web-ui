@@ -241,9 +241,50 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        color: #f44336;
         font-weight: 500;
         margin-bottom: 12px;
+        padding: 12px;
+        border-radius: 4px;
+        
+        &.pending-request {
+            color: #ff8f00;
+            background-color: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ff8f00;
+            
+            mat-icon {
+                color: #ff8f00;
+            }
+        }
+        
+        &.computer-assigned {
+            color: #f44336;
+            background-color: rgba(244, 67, 54, 0.05);
+            border-left: 4px solid #f44336;
+            
+            mat-icon {
+                color: #f44336;
+            }
+        }
+        
+        &.rejected-request {
+            color: #d32f2f;
+            background-color: rgba(211, 47, 47, 0.08);
+            border-left: 4px solid #d32f2f;
+            
+            mat-icon {
+                color: #d32f2f;
+            }
+        }
+        
+        &.canceled-request {
+            color: #616161;
+            background-color: rgba(97, 97, 97, 0.08);
+            border-left: 4px solid #616161;
+            
+            mat-icon {
+                color: #616161;
+            }
+        }
     }
 
     .computer-info-card {
@@ -273,8 +314,76 @@
             .value {
                 flex: 1;
                 font-size: 0.95rem;
+                
+                &.status-badge {
+                    display: inline-block;
+                    padding: 4px 8px;
+                    border-radius: 12px;
+                    font-size: 0.8rem;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    
+                    &.pending {
+                        background-color: #fff3cd;
+                        color: #856404;
+                        border: 1px solid #ffeaa7;
+                    }
+                    
+                    &.approved {
+                        background-color: #d4edda;
+                        color: #155724;
+                        border: 1px solid #c3e6cb;
+                    }
+                    
+                    &.rejected {
+                        background-color: #f8d7da;
+                        color: #721c24;
+                        border: 1px solid #f5c6cb;
+                    }
+                    
+                    &.canceled {
+                        background-color: #f1f3f4;
+                        color: #5f6368;
+                        border: 1px solid #dadce0;
+                    }
+                }
             }
         }
+    }
+}
+
+.pending-request-message {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left: 4px solid #ff8f00;
+    
+    mat-icon {
+        color: #ff8f00;
+    }
+    
+    span {
+        color: #e65100;
+    }
+}
+
+.computer-assigned-message {
+    background-color: rgba(244, 67, 54, 0.05);
+    border-left: 4px solid #f44336;
+    
+    mat-icon {
+        color: #f44336;
+    }
+}
+
+.can-request-message {
+    background-color: rgba(33, 150, 243, 0.08);
+    border-left: 4px solid #2196f3;
+    
+    mat-icon {
+        color: #2196f3;
+    }
+    
+    span {
+        color: #1976d2;
     }
 }
 

@@ -76,21 +76,75 @@
                             </div>
 
                             <div *ngIf="userComputer" class="user-has-computer">
-                                <div class="alert-message">
-                                    <mat-icon color="warn">warning</mat-icon>
-                                    <span>El usuario ya tiene una computadora asignada</span>
+                                <div class="alert-message" [ngClass]="{
+                                    'pending-request': isPendingRequest,
+                                    'computer-assigned': isComputerAssigned,
+                                    'rejected-request': userComputer.status === 'REJECTED',
+                                    'canceled-request': userComputer.status === 'CANCELED'
+                                }">
+                                    <mat-icon [color]="
+                                        isPendingRequest ? 'accent' : 
+                                        isComputerAssigned ? 'warn' : 
+                                        userComputer.status === 'REJECTED' ? '' : 
+                                        userComputer.status === 'CANCELED' ? '' : 'warn'
+                                    ">
+                                        {{
+                                            isPendingRequest ? 'schedule' : 
+                                            isComputerAssigned ? 'warning' : 
+                                            userComputer.status === 'REJECTED' ? 'cancel' : 
+                                            userComputer.status === 'CANCELED' ? 'block' : 'warning'
+                                        }}
+                                    </mat-icon>
+                                    <span>
+                                        {{
+                                            isPendingRequest ? 'El usuario tiene una solicitud de computadora pendiente' :
+                                            isComputerAssigned ? 'El usuario ya tiene una computadora asignada' :
+                                            userComputer.status === 'REJECTED' ? 'La solicitud anterior fue rechazada. Puede crear una nueva solicitud.' :
+                                            userComputer.status === 'CANCELED' ? 'La solicitud anterior fue cancelada. Puede crear una nueva solicitud.' :
+                                            'El usuario tiene un registro de computadora'
+                                        }}
+                                    </span>
                                 </div>
                                 <div class="computer-info-card">
-                                    <h4>Detalles de la computadora asignada:</h4>
+                                    <h4>
+                                        {{
+                                            isPendingRequest ? 'Detalles de la solicitud pendiente:' :
+                                            isComputerAssigned ? 'Detalles de la computadora asignada:' :
+                                            userComputer.status === 'REJECTED' ? 'Detalles de la solicitud rechazada:' :
+                                            userComputer.status === 'CANCELED' ? 'Detalles de la solicitud cancelada:' :
+                                            'Detalles del registro:'
+                                        }}
+                                    </h4>
                                     <div class="computer-info-item">
                                         <span class="label">Modelo:</span>
                                         <span class="value">{{ userComputer.computerModel }}</span>
                                     </div>
                                     <div class="computer-info-item">
-                                        <span class="label">Fecha de Asignación:</span>
+                                        <span class="label">
+                                            {{
+                                                isPendingRequest ? 'Fecha de Solicitud:' :
+                                                isComputerAssigned ? 'Fecha de Asignación:' :
+                                                userComputer.status === 'REJECTED' ? 'Fecha de Rechazo:' :
+                                                userComputer.status === 'CANCELED' ? 'Fecha de Cancelación:' :
+                                                'Fecha de Solicitud:'
+                                            }}
+                                        </span>
                                         <span class="value">{{
                                             userComputer.requestDate | date: 'dd/MM/yyyy HH:mm'
                                         }}</span>
+                                    </div>
+                                    <div class="computer-info-item" *ngIf="isComputerAssigned">
+                                        <span class="label">Número de Serie:</span>
+                                        <span class="value">{{ userComputer.serialNumber }}</span>
+                                    </div>
+                                    <div class="computer-info-item">
+                                        <span class="label">Estado:</span>
+                                        <span class="value status-badge" [ngClass]="userComputer.status.toLowerCase()">
+                                            {{ userComputer.status === 'PENDING' ? 'Pendiente' : 
+                                               userComputer.status === 'APPROVED' ? 'Aprobado' : 
+                                               userComputer.status === 'REJECTED' ? 'Rechazado' : 
+                                               userComputer.status === 'CANCELED' ? 'Cancelado' : userComputer.status }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +163,7 @@
                             <span>Debe buscar y seleccionar un usuario válido primero</span>
                         </div>
 
-                        <div *ngIf="user && userComputer" class="user-required-message">
+                        <div *ngIf="user && isComputerAssigned" class="user-required-message computer-assigned-message">
                             <mat-icon color="warn">block</mat-icon>
                             <span
                                 >No es posible asignar una nueva computadora. El usuario ya tiene
@@ -117,7 +171,22 @@
                             >
                         </div>
 
-                        <ng-container *ngIf="user && userComputer; else normalSelect">
+                        <div *ngIf="user && isPendingRequest" class="user-required-message pending-request-message">
+                            <mat-icon color="accent">schedule</mat-icon>
+                            <span
+                                >El usuario tiene una solicitud pendiente. No es posible crear una nueva solicitud hasta que se resuelva la actual.</span
+                            >
+                        </div>
+
+                        <div *ngIf="user && isRejectedOrCanceled" class="user-required-message can-request-message">
+                            <mat-icon color="primary">info</mat-icon>
+                            <span
+                                >La solicitud anterior fue {{ userComputer?.status === 'REJECTED' ? 'rechazada' : 'cancelada' }}. 
+                                Puede crear una nueva solicitud seleccionando una computadora.</span
+                            >
+                        </div>
+
+                        <ng-container *ngIf="user && !canRequestComputer; else normalSelect">
                             <mat-form-field class="computer-select-field disabled-field">
                                 <mat-label>Selección no disponible</mat-label>
                                 <input
@@ -172,7 +241,7 @@
                             color="primary"
                             type="submit"
                             [disabled]="
-                                assignmentForm.invalid || loading || !user || !!userComputer
+                                assignmentForm.invalid || loading || !user || !canRequestComputer
                             "
                         >
                             <mat-icon>computer</mat-icon>

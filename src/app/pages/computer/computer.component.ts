@@ -91,6 +91,7 @@ export class ComputerComponent implements OnInit {
                 },
             });
     }
+    
     searchUser(): void {
         const userId = Number(this.assignmentForm.get('userId')?.value);
         if (!userId) return;
@@ -133,10 +134,31 @@ export class ComputerComponent implements OnInit {
             },
         });
     }
+
+    get isPendingRequest(): boolean {
+        return this.userComputer?.status === 'PENDING';
+    }
+
+    get isComputerAssigned(): boolean {
+        return this.userComputer?.status === 'APPROVED';
+    }
+
+    get isRejectedOrCanceled(): boolean {
+        return this.userComputer?.status === 'REJECTED' || this.userComputer?.status === 'CANCELED';
+    }
+
+    get canRequestComputer(): boolean {
+        return !this.userComputer || this.isRejectedOrCanceled;
+    }
+
     onSubmit(): void {
-        if (this.assignmentForm.invalid || !this.user || this.userComputer) {
-            if (this.userComputer) {
+        if (this.assignmentForm.invalid || !this.user || !this.canRequestComputer) {
+            if (this.isComputerAssigned) {
                 this.snackBar.open('El usuario ya tiene una computadora asignada', 'Cerrar', {
+                    duration: 5000,
+                });
+            } else if (this.isPendingRequest) {
+                this.snackBar.open('El usuario tiene una solicitud pendiente', 'Cerrar', {
                     duration: 5000,
                 });
             }
@@ -164,7 +186,6 @@ export class ComputerComponent implements OnInit {
                     this.snackBar.open('Computadora asignada correctamente', 'Cerrar', {
                         duration: 3000,
                     });
-                    this.assignmentForm.reset();
                     this.user = null;
                     this.searched = false;
                 },

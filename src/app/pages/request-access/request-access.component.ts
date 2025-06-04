@@ -138,6 +138,7 @@ export class RequestAccessComponent implements OnInit {
 
         this.filteredSystems = this.systems.filter(system => allowedSystems.includes(system.id));
     }
+
     getSelectedSystems(): System[] {
         const selectedSystems: System[] = [];
         const systemAccessControls = this.accessForm.get('systemAccess')?.value;
@@ -164,6 +165,7 @@ export class RequestAccessComponent implements OnInit {
         if (this.accessForm.invalid || !this.user || !this.hasSelectedSystems()) {
             return;
         }
+
         this.loading = true;
         const selectedSystems = this.getSelectedSystems();
         const sessionUser = this.storage.getItem<SessionUser>('user');
@@ -186,11 +188,19 @@ export class RequestAccessComponent implements OnInit {
                     this.snackBar.open('Solicitud enviada correctamente', 'Cerrar', {
                         duration: 3000,
                     });
+                    // El formulario se mantiene intacto para permitir más solicitudes
                 },
                 error: () => {
                     this.snackBar.open('Ocurrio un error al tratar de solicitar permisos', 'Cerrar', { duration: 3000 });
                 },
             });
+    }
+
+    private resetSystemSelections(): void {
+        const systemAccessGroup = this.accessForm.get('systemAccess') as FormGroup;
+        Object.keys(systemAccessGroup.controls).forEach(controlName => {
+            systemAccessGroup.get(controlName)?.setValue(false);
+        });
     }
 
     goBackToDashboard(): void {
