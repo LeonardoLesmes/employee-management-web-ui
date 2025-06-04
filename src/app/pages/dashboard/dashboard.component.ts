@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,21 +14,21 @@ import { HeaderComponent } from '../../shared/components/header/header.component
     styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-    constructor(private readonly router: Router) {}
+    private readonly router = inject(Router);
 
-    viewAllRequests() {
+    public viewAllRequests(): void {
         this.router.navigate(['/requests']);
     }
 
-    public registerNewUser() {
+    public registerNewUser(): void {
         this.router.navigate(['/create-user']);
     }
 
-    requestAccess() {
+    public requestAccess(): void {
         this.router.navigate(['/request-access']);
     }
 
-    assignComputer() {
+    public assignComputer(): void {
         this.router.navigate(['/assign-computer']);
     }
 }
