@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -44,12 +44,29 @@ import { ComputerDetails } from '../../core/models/computer/computer-details';
     styleUrl: './computer.component.scss',
 })
 export class ComputerComponent implements OnInit {
-    assignmentForm!: FormGroup;
-    user: UserRes | null = null;
-    computers: ComputerDetails[] = [];
-    loading = false;
-    searched = false;
-    userComputer: UserComputerRes | null = null;
+    public assignmentForm!: FormGroup;
+    
+    public readonly user = signal<UserRes | null>(null);
+    public readonly computers = signal<ComputerDetails[]>([]);
+    public readonly loading = signal<boolean>(false);
+    public readonly searched = signal<boolean>(false);
+    public readonly userComputer = signal<UserComputerRes | null>(null);
+
+    public readonly isPendingRequest = computed(() => 
+        this.userComputer()?.status === 'PENDING'
+    );
+
+    public readonly isComputerAssigned = computed(() => 
+        this.userComputer()?.status === 'APPROVED'
+    );
+
+    public readonly isRejectedOrCanceled = computed(() => 
+        this.userComputer()?.status === 'REJECTED' || this.userComputer()?.status === 'CANCELED'
+    );
+
+    public readonly canRequestComputer = computed(() => 
+        !this.userComputer() || this.isRejectedOrCanceled()
+    );
 
     private readonly fb = inject(FormBuilder);
     private readonly userService = inject(UserService);
@@ -71,17 +88,17 @@ export class ComputerComponent implements OnInit {
     }
 
     private loadComputers(): void {
-        this.loading = true;
+        this.loading.set(true);
         this.computerService
             .getAvailableComputers()
             .pipe(
                 finalize(() => {
-                    this.loading = false;
+                    this.loading.set(false);
                 })
             )
             .subscribe({
                 next: computers => {
-                    this.computers = computers;
+                    this.computers.set(computers);
                 },
                 error: error => {
                     console.error('Error al cargar computadoras:', error);
@@ -92,42 +109,42 @@ export class ComputerComponent implements OnInit {
             });
     }
     
-    searchUser(): void {
+    public searchUser(): void {
         const userId = Number(this.assignmentForm.get('userId')?.value);
         if (!userId) return;
 
         this.assignmentForm.get('computerId')?.setValue('');
-        this.userComputer = null;
+        this.userComputer.set(null);
 
-        this.loading = true;
+        this.loading.set(true);
 
         this.userService.getUserById(userId).subscribe({
             next: user => {
-                this.user = user;
+                this.user.set(user);
                 this.computerService
                     .getComputerByUserId(userId)
                     .pipe(
                         finalize(() => {
-                            this.loading = false;
-                            this.searched = true;
+                            this.loading.set(false);
+                            this.searched.set(true);
                         })
                     )
                     .subscribe({
                         next: userComputer => {
-                            this.userComputer = userComputer;
+                            this.userComputer.set(userComputer);
                         },
                         error: error => {
                             console.error('Error al buscar computadora asignada:', error);
-                            this.userComputer = null;
+                            this.userComputer.set(null);
                         },
                     });
             },
             error: error => {
                 console.error('Error al buscar usuario:', error);
-                this.user = null;
-                this.userComputer = null;
-                this.loading = false;
-                this.searched = true;
+                this.user.set(null);
+                this.userComputer.set(null);
+                this.loading.set(false);
+                this.searched.set(true);
                 this.snackBar.open('Usuario no encontrado', 'Cerrar', {
                     duration: 5000,
                 });
@@ -135,29 +152,13 @@ export class ComputerComponent implements OnInit {
         });
     }
 
-    get isPendingRequest(): boolean {
-        return this.userComputer?.status === 'PENDING';
-    }
-
-    get isComputerAssigned(): boolean {
-        return this.userComputer?.status === 'APPROVED';
-    }
-
-    get isRejectedOrCanceled(): boolean {
-        return this.userComputer?.status === 'REJECTED' || this.userComputer?.status === 'CANCELED';
-    }
-
-    get canRequestComputer(): boolean {
-        return !this.userComputer || this.isRejectedOrCanceled;
-    }
-
-    onSubmit(): void {
-        if (this.assignmentForm.invalid || !this.user || !this.canRequestComputer) {
-            if (this.isComputerAssigned) {
+    public onSubmit(): void {
+        if (this.assignmentForm.invalid || !this.user() || !this.canRequestComputer()) {
+            if (this.isComputerAssigned()) {
                 this.snackBar.open('El usuario ya tiene una computadora asignada', 'Cerrar', {
                     duration: 5000,
                 });
-            } else if (this.isPendingRequest) {
+            } else if (this.isPendingRequest()) {
                 this.snackBar.open('El usuario tiene una solicitud pendiente', 'Cerrar', {
                     duration: 5000,
                 });
@@ -167,9 +168,9 @@ export class ComputerComponent implements OnInit {
         const computerId = Number(this.assignmentForm.get('computerId')?.value);
         const sessionUser = this.storage.getItem<SessionUser>('user');
 
-        this.loading = true;
+        this.loading.set(true);
         const assignmentRequest: UserComputerReq = {
-            employeeId: this.user.id,
+            employeeId: this.user()!.id,
             computerId: computerId,
             assignedById: sessionUser?.id as number,
         };
@@ -178,7 +179,7 @@ export class ComputerComponent implements OnInit {
             .assignComputer(assignmentRequest)
             .pipe(
                 finalize(() => {
-                    this.loading = false;
+                    this.loading.set(false);
                 })
             )
             .subscribe({
@@ -186,8 +187,8 @@ export class ComputerComponent implements OnInit {
                     this.snackBar.open('Computadora asignada correctamente', 'Cerrar', {
                         duration: 3000,
                     });
-                    this.user = null;
-                    this.searched = false;
+                    this.user.set(null);
+                    this.searched.set(false);
                 },
                 error: () => {
                     this.snackBar.open('Ocurrió un error al asignar la computadora', 'Cerrar', {
@@ -197,7 +198,7 @@ export class ComputerComponent implements OnInit {
             });
     }
 
-    goBackToDashboard(): void {
+    public goBackToDashboard(): void {
         this.router.navigate(['/dashboard']);
     }
 }
